@@ -1,25 +1,66 @@
-# irontrack-fitness
+# IronTrack Fitness
 
-Nombre visible de la app:
-IronTrack Fitness
+App mvil con React Native + Expo pensada para gestionar entrenamientos en un gimnasio personal en casa, con enfoque offline y uso rpido en Android.
 
-Nombre corto:
-IronTrack
+## Stack actual
 
-Repositorio GitHub:
-irontrack-fitness
+- Expo
+- React Native
+- React Navigation
+- SQLite local con `expo-sqlite`
+- TypeScript
 
-Frontend:
-irontrack-fitness-web
+## Estructura base
 
-Backend:
-irontrack-fitness-api
+```text
+src/
+  components/
+  database/
+  navigation/
+  repositories/
+  screens/
+  seed/
+  services/
+  theme/
+  types/
+  utils/
+```
 
-Base de datos:
-irontrack_fitness_db
+## Funcionalidad incluida en esta fase
 
-Package backend:
-com.irontrack.fitness
+- Estructura inicial del proyecto Expo
+- Tema oscuro base
+- Navegacin principal para mvil
+- Inicializacin de SQLite al arrancar
+- Tabla `user_profiles`
+- Tabla `equipment`
+- Repositorios bsicos de perfil y material
+- Onboarding local para crear perfil
+- Semilla inicial de material del gimnasio
+- Pantalla para listar, crear, editar, marcar favorito y desactivar material
 
-Título web:
-IronTrack Fitness | Personal AI Gym Tracker
+## Cmo arrancar la app
+
+1. Instala dependencias:
+
+```powershell
+npm.cmd install
+```
+
+2. Arranca Expo:
+
+```powershell
+npm.cmd run start
+```
+
+3. Para abrir Android cuando tengas el entorno preparado:
+
+```powershell
+npm.cmd run android
+```
+
+## Notas
+
+- La app est pensada primero para Android.
+- No hay backend, login online, JWT ni sincronizacin en esta fase.
+- La base de datos es local y funciona offline.
