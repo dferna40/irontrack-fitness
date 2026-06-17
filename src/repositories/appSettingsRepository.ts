@@ -13,6 +13,10 @@ interface AppSettingsRow {
   quick_add_15_enabled: number;
   quick_add_30_enabled: number;
   quick_add_60_enabled: number;
+  weights_playlist_url: string | null;
+  cardio_playlist_url: string | null;
+  boxing_playlist_url: string | null;
+  stretching_playlist_url: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -30,6 +34,10 @@ function mapRow(row: AppSettingsRow): AppSettings {
     quickAdd15Enabled: Boolean(row.quick_add_15_enabled),
     quickAdd30Enabled: Boolean(row.quick_add_30_enabled),
     quickAdd60Enabled: Boolean(row.quick_add_60_enabled),
+    weightsPlaylistUrl: row.weights_playlist_url,
+    cardioPlaylistUrl: row.cardio_playlist_url,
+    boxingPlaylistUrl: row.boxing_playlist_url,
+    stretchingPlaylistUrl: row.stretching_playlist_url,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
@@ -72,6 +80,10 @@ export async function updateAppSettings(input: UpdateAppSettingsInput) {
         quick_add_15_enabled = ?,
         quick_add_30_enabled = ?,
         quick_add_60_enabled = ?,
+        weights_playlist_url = ?,
+        cardio_playlist_url = ?,
+        boxing_playlist_url = ?,
+        stretching_playlist_url = ?,
         updated_at = CURRENT_TIMESTAMP
       WHERE id = 1;
     `,
@@ -88,6 +100,14 @@ export async function updateAppSettings(input: UpdateAppSettingsInput) {
       (input.quickAdd15Enabled ?? current.quickAdd15Enabled) ? 1 : 0,
       (input.quickAdd30Enabled ?? current.quickAdd30Enabled) ? 1 : 0,
       (input.quickAdd60Enabled ?? current.quickAdd60Enabled) ? 1 : 0,
+      input.weightsPlaylistUrl !== undefined
+        ? input.weightsPlaylistUrl
+        : current.weightsPlaylistUrl,
+      input.cardioPlaylistUrl !== undefined ? input.cardioPlaylistUrl : current.cardioPlaylistUrl,
+      input.boxingPlaylistUrl !== undefined ? input.boxingPlaylistUrl : current.boxingPlaylistUrl,
+      input.stretchingPlaylistUrl !== undefined
+        ? input.stretchingPlaylistUrl
+        : current.stretchingPlaylistUrl,
     ],
   );
 

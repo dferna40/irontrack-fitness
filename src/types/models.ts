@@ -343,6 +343,10 @@ export interface AppSettings {
   quickAdd15Enabled: boolean;
   quickAdd30Enabled: boolean;
   quickAdd60Enabled: boolean;
+  weightsPlaylistUrl: string | null;
+  cardioPlaylistUrl: string | null;
+  boxingPlaylistUrl: string | null;
+  stretchingPlaylistUrl: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -358,6 +362,10 @@ export interface UpdateAppSettingsInput {
   quickAdd15Enabled?: boolean;
   quickAdd30Enabled?: boolean;
   quickAdd60Enabled?: boolean;
+  weightsPlaylistUrl?: string | null;
+  cardioPlaylistUrl?: string | null;
+  boxingPlaylistUrl?: string | null;
+  stretchingPlaylistUrl?: string | null;
 }
 
 export interface ActiveWorkoutSetDraft {
@@ -407,4 +415,27 @@ export interface CreateCardioSessionInput {
   intensity: CardioIntensity;
   distance?: number | null;
   notes?: string | null;
+}
+
+export interface BoxingRoundSession {
+  id: number;
+  profileId: number;
+  totalRounds: number;
+  roundDurationSeconds: number;
+  restSeconds: number;
+  completedRounds: number;
+  startedAt: string;
+  finishedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateBoxingRoundSessionInput {
+  profileId: number;
+  totalRounds: number;
+  roundDurationSeconds: number;
+  restSeconds: number;
+  completedRounds: number;
+  startedAt: string;
+  finishedAt?: string | null;
 }

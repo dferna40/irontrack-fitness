@@ -3,7 +3,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text } from "react-native";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { ActiveWorkoutScreen } from "../screens/ActiveWorkoutScreen";
+import { AboutScreen } from "../screens/AboutScreen";
+import { AppearanceSettingsScreen } from "../screens/AppearanceSettingsScreen";
+import { BoxingActiveScreen } from "../screens/BoxingActiveScreen";
+import { BoxingSetupScreen } from "../screens/BoxingSetupScreen";
 import { CardioSessionScreen } from "../screens/CardioSessionScreen";
+import { DataBackupScreen } from "../screens/DataBackupScreen";
 import { EquipmentFormScreen } from "../screens/EquipmentFormScreen";
 import { EquipmentScreen } from "../screens/EquipmentScreen";
 import { ExerciseDetailScreen } from "../screens/ExerciseDetailScreen";
@@ -14,8 +19,11 @@ import { ExercisesScreen } from "../screens/ExercisesScreen";
 import { FreeWorkoutSetupScreen } from "../screens/FreeWorkoutSetupScreen";
 import { HistoryScreen } from "../screens/HistoryScreen";
 import { HomeScreen } from "../screens/HomeScreen";
+import { MusicSettingsScreen } from "../screens/MusicSettingsScreen";
 import { OnboardingScreen } from "../screens/OnboardingScreen";
+import { ProfileSettingsScreen } from "../screens/ProfileSettingsScreen";
 import { ProgressScreen } from "../screens/ProgressScreen";
+import { ProgressionSettingsScreen } from "../screens/ProgressionSettingsScreen";
 import { RoutineDetailScreen } from "../screens/RoutineDetailScreen";
 import { RoutineFormScreen } from "../screens/RoutineFormScreen";
 import { RoutinesScreen } from "../screens/RoutinesScreen";
@@ -38,14 +46,28 @@ export type RootStackParamList = {
   ExerciseForm: { exerciseId?: number } | undefined;
   ExerciseTechnique: { exerciseId: number };
   ExerciseProgressDetail: { exerciseId: number };
+  ExercisesLibrary: undefined;
   FreeWorkoutSetup: undefined;
   CardioSession: undefined;
+  BoxingSetup: undefined;
+  BoxingActive: {
+    totalRounds: number;
+    roundDurationSeconds: number;
+    restSeconds: number;
+  };
   RoutineDetail: { routineId: number };
   RoutineForm: { routineId?: number } | undefined;
+  RoutinesLibrary: undefined;
   ActiveWorkout: undefined;
   WorkoutSummary: undefined;
   WorkoutDetail: { workoutId: number };
   TimerSettings: undefined;
+  MusicSettings: undefined;
+  ProfileSettings: undefined;
+  ProgressionSettings: undefined;
+  AppearanceSettings: undefined;
+  DataBackup: undefined;
+  About: undefined;
 };
 
 export type AppTabParamList = {
@@ -180,6 +202,11 @@ export function AppNavigator() {
             options={{ title: "Progreso por ejercicio" }}
           />
           <Stack.Screen
+            name="ExercisesLibrary"
+            component={ExercisesScreen}
+            options={{ title: "Ejercicios" }}
+          />
+          <Stack.Screen
             name="FreeWorkoutSetup"
             component={FreeWorkoutSetupScreen}
             options={{ title: "Entrenamiento libre" }}
@@ -188,6 +215,16 @@ export function AppNavigator() {
             name="CardioSession"
             component={CardioSessionScreen}
             options={{ title: "Modo cardio" }}
+          />
+          <Stack.Screen
+            name="BoxingSetup"
+            component={BoxingSetupScreen}
+            options={{ title: "Boxeo por rondas" }}
+          />
+          <Stack.Screen
+            name="BoxingActive"
+            component={BoxingActiveScreen}
+            options={{ title: "Boxeo activo" }}
           />
           <Stack.Screen
             name="RoutineDetail"
@@ -212,6 +249,11 @@ export function AppNavigator() {
             })}
           />
           <Stack.Screen
+            name="RoutinesLibrary"
+            component={RoutinesScreen}
+            options={{ title: "Rutinas" }}
+          />
+          <Stack.Screen
             name="ActiveWorkout"
             component={ActiveWorkoutScreen}
             options={{ title: "Entrenamiento activo" }}
@@ -230,6 +272,36 @@ export function AppNavigator() {
             name="TimerSettings"
             component={TimerSettingsScreen}
             options={{ title: "Temporizador" }}
+          />
+          <Stack.Screen
+            name="MusicSettings"
+            component={MusicSettingsScreen}
+            options={{ title: "Música" }}
+          />
+          <Stack.Screen
+            name="ProfileSettings"
+            component={ProfileSettingsScreen}
+            options={{ title: "Perfil" }}
+          />
+          <Stack.Screen
+            name="ProgressionSettings"
+            component={ProgressionSettingsScreen}
+            options={{ title: "Progresión" }}
+          />
+          <Stack.Screen
+            name="AppearanceSettings"
+            component={AppearanceSettingsScreen}
+            options={{ title: "Apariencia" }}
+          />
+          <Stack.Screen
+            name="DataBackup"
+            component={DataBackupScreen}
+            options={{ title: "Datos y copia de seguridad" }}
+          />
+          <Stack.Screen
+            name="About"
+            component={AboutScreen}
+            options={{ title: "Acerca de" }}
           />
         </>
       )}

@@ -12,6 +12,7 @@ import { RootStackParamList } from "../navigation/AppNavigator";
 import { useAppState } from "../services/app-state";
 import { useTrainingSession } from "../services/training-session";
 import { theme } from "../theme";
+import { openMusicUrl } from "../utils/music";
 
 type Props = NativeStackScreenProps<RootStackParamList, "ActiveWorkout">;
 
@@ -243,6 +244,10 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
         onPress={() =>
           navigation.navigate("ExerciseTechnique", { exerciseId: currentExercise.exerciseId })
         }
+      />
+      <SecondaryButton
+        label="Abrir música"
+        onPress={() => void openMusicUrl(settings, "weights")}
       />
       <SecondaryButton
         label="Finalizar"

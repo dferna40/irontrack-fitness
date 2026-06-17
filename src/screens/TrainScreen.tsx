@@ -33,6 +33,10 @@ export function TrainScreen() {
             label="Modo cardio"
             onPress={() => navigation.navigate("CardioSession")}
           />
+          <SecondaryButton
+            label="Boxeo por rondas"
+            onPress={() => navigation.navigate("BoxingSetup")}
+          />
         </Card>
       </ScreenContainer>
     );

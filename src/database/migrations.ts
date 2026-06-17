@@ -1,5 +1,23 @@
 import { getDatabase } from "./client";
 
+interface TableInfoRow {
+  name: string;
+}
+
+async function ensureColumn(
+  db: Awaited<ReturnType<typeof getDatabase>>,
+  tableName: string,
+  columnName: string,
+  definition: string,
+) {
+  const columns = await db.getAllAsync<TableInfoRow>(`PRAGMA table_info(${tableName});`);
+  const exists = columns.some((column) => column.name === columnName);
+
+  if (!exists) {
+    await db.execAsync(`ALTER TABLE ${tableName} ADD COLUMN ${columnName} ${definition};`);
+  }
+}
+
 export async function initDatabase() {
   try {
     const db = await getDatabase();
@@ -173,6 +191,10 @@ export async function initDatabase() {
         quick_add_15_enabled INTEGER NOT NULL DEFAULT 1,
         quick_add_30_enabled INTEGER NOT NULL DEFAULT 1,
         quick_add_60_enabled INTEGER NOT NULL DEFAULT 1,
+        weights_playlist_url TEXT,
+        cardio_playlist_url TEXT,
+        boxing_playlist_url TEXT,
+        stretching_playlist_url TEXT,
         created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
       );
@@ -189,9 +211,28 @@ export async function initDatabase() {
         updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (profile_id) REFERENCES user_profiles (id)
       );
+
+      CREATE TABLE IF NOT EXISTS boxing_rounds (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profile_id INTEGER NOT NULL,
+        total_rounds INTEGER NOT NULL,
+        round_duration_seconds INTEGER NOT NULL,
+        rest_seconds INTEGER NOT NULL,
+        completed_rounds INTEGER NOT NULL DEFAULT 0,
+        started_at TEXT NOT NULL,
+        finished_at TEXT,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (profile_id) REFERENCES user_profiles (id)
+      );
       
       PRAGMA foreign_keys = ON;
     `);
+
+    await ensureColumn(db, "app_settings", "weights_playlist_url", "TEXT");
+    await ensureColumn(db, "app_settings", "cardio_playlist_url", "TEXT");
+    await ensureColumn(db, "app_settings", "boxing_playlist_url", "TEXT");
+    await ensureColumn(db, "app_settings", "stretching_playlist_url", "TEXT");
   } catch (error) {
     console.error("initDatabase failed", error);
     throw new Error("No se pudo preparar la base de datos local.");
