@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { initDatabase } from "../database/migrations";
 import { getActiveProfile } from "../repositories/userProfileRepository";
 import { seedInitialEquipment } from "../seed/initialEquipment";
+import { seedInitialExercises } from "../seed/initialExercises";
 import { UserProfile } from "../types/models";
 
 interface AppStateValue {
@@ -22,6 +23,12 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const refreshProfile = async () => {
     const activeProfile = await getActiveProfile();
+
+    if (activeProfile) {
+      await seedInitialEquipment(activeProfile.id);
+      await seedInitialExercises(activeProfile.id);
+    }
+
     setProfile(activeProfile);
   };
 
@@ -47,6 +54,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
 
   const completeOnboarding = async (nextProfile: UserProfile) => {
     await seedInitialEquipment(nextProfile.id);
+    await seedInitialExercises(nextProfile.id);
     setProfile(nextProfile);
   };
 

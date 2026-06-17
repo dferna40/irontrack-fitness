@@ -2,10 +2,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Text } from "react-native";
 import { PrimaryButton } from "../components/PrimaryButton";
-import { useAppState } from "../services/app-state";
-import { theme } from "../theme";
 import { EquipmentFormScreen } from "../screens/EquipmentFormScreen";
 import { EquipmentScreen } from "../screens/EquipmentScreen";
+import { ExerciseDetailScreen } from "../screens/ExerciseDetailScreen";
+import { ExerciseFormScreen } from "../screens/ExerciseFormScreen";
+import { ExerciseTechniqueScreen } from "../screens/ExerciseTechniqueScreen";
 import { ExercisesScreen } from "../screens/ExercisesScreen";
 import { HistoryScreen } from "../screens/HistoryScreen";
 import { HomeScreen } from "../screens/HomeScreen";
@@ -14,6 +15,8 @@ import { ProgressScreen } from "../screens/ProgressScreen";
 import { RoutinesScreen } from "../screens/RoutinesScreen";
 import { SettingsScreen } from "../screens/SettingsScreen";
 import { TrainScreen } from "../screens/TrainScreen";
+import { useAppState } from "../services/app-state";
+import { theme } from "../theme";
 
 export type RootStackParamList = {
   AppTabs: undefined;
@@ -22,6 +25,9 @@ export type RootStackParamList = {
   Progress: undefined;
   Equipment: undefined;
   EquipmentForm: { equipmentId?: number } | undefined;
+  ExerciseDetail: { exerciseId: number };
+  ExerciseForm: { exerciseId?: number } | undefined;
+  ExerciseTechnique: { exerciseId: number };
 };
 
 export type AppTabParamList = {
@@ -35,13 +41,7 @@ export type AppTabParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<AppTabParamList>();
 
-function PlaceholderHeaderAction({
-  label,
-  onPress,
-}: {
-  label: string;
-  onPress: () => void;
-}) {
+function HeaderAction({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <PrimaryButton
       label={label}
@@ -126,7 +126,7 @@ export function AppNavigator() {
             options={({ navigation }) => ({
               title: "Material del gimnasio",
               headerRight: () => (
-                <PlaceholderHeaderAction
+                <HeaderAction
                   label="Nuevo"
                   onPress={() => navigation.navigate("EquipmentForm")}
                 />
@@ -139,6 +139,33 @@ export function AppNavigator() {
             options={({ route }) => ({
               title: route.params?.equipmentId ? "Editar material" : "Nuevo material",
             })}
+          />
+          <Stack.Screen
+            name="ExerciseDetail"
+            component={ExerciseDetailScreen}
+            options={({ navigation, route }) => ({
+              title: "Detalle de ejercicio",
+              headerRight: () => (
+                <HeaderAction
+                  label="Editar"
+                  onPress={() =>
+                    navigation.navigate("ExerciseForm", { exerciseId: route.params.exerciseId })
+                  }
+                />
+              ),
+            })}
+          />
+          <Stack.Screen
+            name="ExerciseForm"
+            component={ExerciseFormScreen}
+            options={({ route }) => ({
+              title: route.params?.exerciseId ? "Editar ejercicio" : "Nuevo ejercicio",
+            })}
+          />
+          <Stack.Screen
+            name="ExerciseTechnique"
+            component={ExerciseTechniqueScreen}
+            options={{ title: "Ver técnica" }}
           />
         </>
       )}

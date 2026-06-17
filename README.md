@@ -34,10 +34,16 @@ src/
 - Inicializacin de SQLite al arrancar
 - Tabla `user_profiles`
 - Tabla `equipment`
-- Repositorios bsicos de perfil y material
+- Tabla `exercises`
+- Tabla `exercise_equipment`
+- Tabla `exercise_media`
+- Repositorios bsicos de perfil, material, ejercicios y media
 - Onboarding local para crear perfil
 - Semilla inicial de material del gimnasio
+- Semilla inicial de ejercicios adaptados al gimnasio
 - Pantalla para listar, crear, editar, marcar favorito y desactivar material
+- Pantallas de ejercicios con filtros, detalle, edicin y vista tcnica
+- Recurso visual local principal por ejercicio con vista previa
 
 ## Cmo arrancar la app
 

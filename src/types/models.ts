@@ -2,6 +2,8 @@ export type ThemeMode = "dark";
 export type WeightUnit = "kg" | "lb";
 export type DistanceUnit = "km" | "mi";
 export type ProfileLevel = "beginner" | "intermediate" | "advanced";
+export type ExerciseType = "fuerza" | "cardio" | "boxeo" | "movilidad" | "abdomen";
+export type ExerciseMediaType = "gif" | "webp" | "mp4" | "jpg" | "png";
 
 export interface UserProfile {
   id: number;
@@ -68,3 +70,85 @@ export interface EquipmentFilters {
   onlyFavorites?: boolean;
 }
 
+export interface Exercise {
+  id: number;
+  profileId: number;
+  name: string;
+  muscleGroup: string;
+  type: ExerciseType;
+  description: string | null;
+  technicalNotes: string | null;
+  executionTips: string | null;
+  defaultRestSeconds: number | null;
+  isFavorite: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateExerciseInput {
+  profileId: number;
+  name: string;
+  muscleGroup: string;
+  type: ExerciseType;
+  description?: string;
+  technicalNotes?: string;
+  executionTips?: string;
+  defaultRestSeconds?: number | null;
+  isFavorite?: boolean;
+  isActive?: boolean;
+}
+
+export interface UpdateExerciseInput extends CreateExerciseInput {
+  id: number;
+}
+
+export interface ExerciseFilters {
+  search?: string;
+  muscleGroup?: string | null;
+  type?: ExerciseType | null;
+  equipmentId?: number | null;
+  onlyActive?: boolean;
+}
+
+export interface ExerciseEquipmentLink {
+  id: number;
+  exerciseId: number;
+  equipmentId: number;
+}
+
+export interface ExerciseWithRelations extends Exercise {
+  equipment: EquipmentItem[];
+  media: ExerciseMedia | null;
+}
+
+export interface ExerciseMedia {
+  id: number;
+  exerciseId: number;
+  mediaType: ExerciseMediaType;
+  mimeType: string | null;
+  originalFileName: string | null;
+  localPath: string;
+  originalWidth: number | null;
+  originalHeight: number | null;
+  processedWidth: number | null;
+  processedHeight: number | null;
+  fileSize: number | null;
+  durationSeconds: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpsertExerciseMediaInput {
+  exerciseId: number;
+  mediaType: ExerciseMediaType;
+  mimeType?: string | null;
+  originalFileName?: string | null;
+  localPath: string;
+  originalWidth?: number | null;
+  originalHeight?: number | null;
+  processedWidth?: number | null;
+  processedHeight?: number | null;
+  fileSize?: number | null;
+  durationSeconds?: number | null;
+}
