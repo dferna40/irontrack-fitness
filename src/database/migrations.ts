@@ -88,6 +88,109 @@ export async function initDatabase() {
         updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (exercise_id) REFERENCES exercises (id) ON DELETE CASCADE
       );
+
+      CREATE TABLE IF NOT EXISTS routines (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profile_id INTEGER NOT NULL,
+        name TEXT NOT NULL,
+        description TEXT,
+        goal TEXT,
+        is_active INTEGER NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (profile_id) REFERENCES user_profiles (id)
+      );
+
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_routines_profile_name
+      ON routines (profile_id, name);
+
+      CREATE TABLE IF NOT EXISTS routine_exercises (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        routine_id INTEGER NOT NULL,
+        exercise_id INTEGER NOT NULL,
+        exercise_order INTEGER NOT NULL,
+        target_sets INTEGER,
+        target_reps_min INTEGER,
+        target_reps_max INTEGER,
+        target_weight REAL,
+        rest_seconds INTEGER,
+        notes TEXT,
+        FOREIGN KEY (routine_id) REFERENCES routines (id) ON DELETE CASCADE,
+        FOREIGN KEY (exercise_id) REFERENCES exercises (id)
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_routine_exercises_routine_order
+      ON routine_exercises (routine_id, exercise_order);
+
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_routine_exercises_unique_order
+      ON routine_exercises (routine_id, exercise_order);
+
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_routine_exercises_unique_pair
+      ON routine_exercises (routine_id, exercise_id, exercise_order);
+
+      CREATE TABLE IF NOT EXISTS workouts (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profile_id INTEGER NOT NULL,
+        routine_id INTEGER,
+        workout_type TEXT NOT NULL,
+        date TEXT NOT NULL,
+        started_at TEXT NOT NULL,
+        finished_at TEXT,
+        duration_minutes INTEGER,
+        difficulty TEXT,
+        discomfort_level TEXT,
+        notes TEXT,
+        FOREIGN KEY (profile_id) REFERENCES user_profiles (id),
+        FOREIGN KEY (routine_id) REFERENCES routines (id)
+      );
+
+      CREATE TABLE IF NOT EXISTS workout_sets (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        workout_id INTEGER NOT NULL,
+        exercise_id INTEGER NOT NULL,
+        set_number INTEGER NOT NULL,
+        weight REAL NOT NULL,
+        reps INTEGER NOT NULL,
+        completed INTEGER NOT NULL DEFAULT 1,
+        rest_seconds_used INTEGER,
+        notes TEXT,
+        FOREIGN KEY (workout_id) REFERENCES workouts (id) ON DELETE CASCADE,
+        FOREIGN KEY (exercise_id) REFERENCES exercises (id)
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_workout_sets_workout
+      ON workout_sets (workout_id, exercise_id, set_number);
+
+      CREATE TABLE IF NOT EXISTS app_settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        default_rest_seconds INTEGER NOT NULL DEFAULT 60,
+        auto_start_rest INTEGER NOT NULL DEFAULT 1,
+        progression_recommendations_enabled INTEGER NOT NULL DEFAULT 1,
+        sound_enabled INTEGER NOT NULL DEFAULT 1,
+        vibration_enabled INTEGER NOT NULL DEFAULT 1,
+        local_notification_enabled INTEGER NOT NULL DEFAULT 0,
+        keep_screen_awake INTEGER NOT NULL DEFAULT 1,
+        quick_add_15_enabled INTEGER NOT NULL DEFAULT 1,
+        quick_add_30_enabled INTEGER NOT NULL DEFAULT 1,
+        quick_add_60_enabled INTEGER NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS cardio_sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profile_id INTEGER NOT NULL,
+        cardio_type TEXT NOT NULL,
+        duration_minutes INTEGER NOT NULL,
+        intensity TEXT NOT NULL,
+        distance REAL,
+        notes TEXT,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (profile_id) REFERENCES user_profiles (id)
+      );
+      
+      PRAGMA foreign_keys = ON;
     `);
   } catch (error) {
     console.error("initDatabase failed", error);

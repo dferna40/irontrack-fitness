@@ -28,6 +28,19 @@ export function SettingsScreen() {
           onPress={() => navigation.navigate("Equipment")}
         />
       </Card>
+
+      <Card>
+        <Text style={{ color: theme.colors.text, fontSize: 18, fontWeight: "700" }}>
+          Temporizador
+        </Text>
+        <Text style={{ color: theme.colors.textMuted, lineHeight: 20 }}>
+          Ajusta descanso por defecto, avisos y comportamiento durante el entrenamiento.
+        </Text>
+        <SecondaryButton
+          label="Configurar temporizador"
+          onPress={() => navigation.navigate("TimerSettings")}
+        />
+      </Card>
     </PlaceholderScreen>
   );
 }

@@ -306,3 +306,17 @@ export const initialExerciseSeed = [
 ];
 
 export const mediaTypeExtensions = ["gif", "webp", "mp4", "jpg", "jpeg", "png"] as const;
+
+export const workoutDifficultyOptions = [
+  "Fácil",
+  "Normal",
+  "Difícil",
+  "Muy difícil",
+] as const;
+
+export const workoutDiscomfortOptions = [
+  "Sin molestias",
+  "Molestia leve",
+  "Molestia moderada",
+  "Dolor",
+] as const;
