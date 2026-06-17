@@ -1,8 +1,13 @@
 import {
+  AppearanceThemeMode,
+  BackgroundMode,
+  CardStyle,
   DistanceUnit,
   ExerciseType,
   ProfileLevel,
+  TextSize,
   ThemeMode,
+  TimerStyle,
   WeightUnit,
 } from "../types/models";
 
@@ -43,6 +48,53 @@ export const distanceUnitOptions: Array<{ label: string; value: DistanceUnit }> 
 
 export const themeOptions: Array<{ label: string; value: ThemeMode }> = [
   { label: "Oscuro", value: "dark" },
+];
+
+export const appearanceThemeOptions: Array<{ label: string; value: AppearanceThemeMode }> = [
+  { label: "Oscuro", value: "dark" },
+  { label: "Claro", value: "light" },
+  { label: "Automático", value: "system" },
+];
+
+export const cardStyleOptions: Array<{ label: string; value: CardStyle }> = [
+  { label: "Compacto", value: "compact" },
+  { label: "Normal", value: "normal" },
+  { label: "Grande", value: "large" },
+];
+
+export const textSizeOptions: Array<{ label: string; value: TextSize }> = [
+  { label: "Pequeño", value: "small" },
+  { label: "Normal", value: "normal" },
+  { label: "Grande", value: "large" },
+];
+
+export const timerStyleOptions: Array<{ label: string; value: TimerStyle }> = [
+  { label: "Digital", value: "digital" },
+  { label: "Circular", value: "circular" },
+  { label: "Barra", value: "bar" },
+];
+
+export const backgroundModeOptions: Array<{ label: string; value: BackgroundMode }> = [
+  { label: "Por defecto", value: "default" },
+  { label: "Color sólido", value: "solid" },
+  { label: "Degradado", value: "gradient" },
+  { label: "Imagen", value: "image" },
+];
+
+export const backgroundColorOptions = [
+  "#0b0f14",
+  "#141a22",
+  "#1d3557",
+  "#264653",
+  "#3a0f0f",
+  "#1b4332",
+];
+
+export const gradientPresetOptions = [
+  { label: "Hierro", start: "#0b0f14", end: "#1b2430" },
+  { label: "Fuego", start: "#2b0f0f", end: "#ff6b2c" },
+  { label: "Acero", start: "#0f1722", end: "#334155" },
+  { label: "Bosque", start: "#102a1b", end: "#2d6a4f" },
 ];
 
 export const initialEquipmentSeed = [

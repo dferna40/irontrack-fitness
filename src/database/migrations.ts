@@ -225,6 +225,39 @@ export async function initDatabase() {
         updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (profile_id) REFERENCES user_profiles (id)
       );
+
+      CREATE TABLE IF NOT EXISTS appearance_settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        theme_mode TEXT NOT NULL DEFAULT 'dark',
+        accent_color TEXT NOT NULL DEFAULT '#ff6b2c',
+        card_style TEXT NOT NULL DEFAULT 'normal',
+        text_size TEXT NOT NULL DEFAULT 'normal',
+        timer_style TEXT NOT NULL DEFAULT 'digital',
+        background_mode TEXT NOT NULL DEFAULT 'default',
+        background_solid_color TEXT NOT NULL DEFAULT '#0b0f14',
+        background_gradient_start TEXT NOT NULL DEFAULT '#0b0f14',
+        background_gradient_end TEXT NOT NULL DEFAULT '#1b2430',
+        background_image_path TEXT,
+        background_image_opacity REAL NOT NULL DEFAULT 0.35,
+        background_dark_overlay REAL NOT NULL DEFAULT 0.45,
+        background_blur_radius REAL NOT NULL DEFAULT 0,
+        show_suggested_routine INTEGER NOT NULL DEFAULT 1,
+        show_last_workout INTEGER NOT NULL DEFAULT 1,
+        show_weekly_summary INTEGER NOT NULL DEFAULT 1,
+        show_quick_music INTEGER NOT NULL DEFAULT 1,
+        show_recent_progress INTEGER NOT NULL DEFAULT 1,
+        show_motivational_quote INTEGER NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS motivational_quotes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        text TEXT NOT NULL,
+        is_default INTEGER NOT NULL DEFAULT 0,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
       
       PRAGMA foreign_keys = ON;
     `);
@@ -233,6 +266,80 @@ export async function initDatabase() {
     await ensureColumn(db, "app_settings", "cardio_playlist_url", "TEXT");
     await ensureColumn(db, "app_settings", "boxing_playlist_url", "TEXT");
     await ensureColumn(db, "app_settings", "stretching_playlist_url", "TEXT");
+    await ensureColumn(db, "appearance_settings", "background_mode", "TEXT NOT NULL DEFAULT 'default'");
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "background_solid_color",
+      "TEXT NOT NULL DEFAULT '#0b0f14'",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "background_gradient_start",
+      "TEXT NOT NULL DEFAULT '#0b0f14'",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "background_gradient_end",
+      "TEXT NOT NULL DEFAULT '#1b2430'",
+    );
+    await ensureColumn(db, "appearance_settings", "background_image_path", "TEXT");
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "background_image_opacity",
+      "REAL NOT NULL DEFAULT 0.35",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "background_dark_overlay",
+      "REAL NOT NULL DEFAULT 0.45",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "background_blur_radius",
+      "REAL NOT NULL DEFAULT 0",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "show_suggested_routine",
+      "INTEGER NOT NULL DEFAULT 1",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "show_last_workout",
+      "INTEGER NOT NULL DEFAULT 1",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "show_weekly_summary",
+      "INTEGER NOT NULL DEFAULT 1",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "show_quick_music",
+      "INTEGER NOT NULL DEFAULT 1",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "show_recent_progress",
+      "INTEGER NOT NULL DEFAULT 1",
+    );
+    await ensureColumn(
+      db,
+      "appearance_settings",
+      "show_motivational_quote",
+      "INTEGER NOT NULL DEFAULT 1",
+    );
   } catch (error) {
     console.error("initDatabase failed", error);
     throw new Error("No se pudo preparar la base de datos local.");

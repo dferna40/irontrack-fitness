@@ -1,9 +1,14 @@
 export type ThemeMode = "dark";
+export type AppearanceThemeMode = "dark" | "light" | "system";
 export type WeightUnit = "kg" | "lb";
 export type DistanceUnit = "km" | "mi";
 export type ProfileLevel = "beginner" | "intermediate" | "advanced";
 export type ExerciseType = "fuerza" | "cardio" | "boxeo" | "movilidad" | "abdomen";
 export type ExerciseMediaType = "gif" | "webp" | "mp4" | "jpg" | "png";
+export type CardStyle = "compact" | "normal" | "large";
+export type TextSize = "small" | "normal" | "large";
+export type TimerStyle = "digital" | "circular" | "bar";
+export type BackgroundMode = "default" | "solid" | "gradient" | "image";
 
 export interface UserProfile {
   id: number;
@@ -366,6 +371,70 @@ export interface UpdateAppSettingsInput {
   cardioPlaylistUrl?: string | null;
   boxingPlaylistUrl?: string | null;
   stretchingPlaylistUrl?: string | null;
+}
+
+export interface AppearanceSettings {
+  id: number;
+  themeMode: AppearanceThemeMode;
+  accentColor: string;
+  cardStyle: CardStyle;
+  textSize: TextSize;
+  timerStyle: TimerStyle;
+  backgroundMode: BackgroundMode;
+  backgroundSolidColor: string;
+  backgroundGradientStart: string;
+  backgroundGradientEnd: string;
+  backgroundImagePath: string | null;
+  backgroundImageOpacity: number;
+  backgroundDarkOverlay: number;
+  backgroundBlurRadius: number;
+  showSuggestedRoutine: boolean;
+  showLastWorkout: boolean;
+  showWeeklySummary: boolean;
+  showQuickMusic: boolean;
+  showRecentProgress: boolean;
+  showMotivationalQuote: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateAppearanceSettingsInput {
+  themeMode?: AppearanceThemeMode;
+  accentColor?: string;
+  cardStyle?: CardStyle;
+  textSize?: TextSize;
+  timerStyle?: TimerStyle;
+  backgroundMode?: BackgroundMode;
+  backgroundSolidColor?: string;
+  backgroundGradientStart?: string;
+  backgroundGradientEnd?: string;
+  backgroundImagePath?: string | null;
+  backgroundImageOpacity?: number;
+  backgroundDarkOverlay?: number;
+  backgroundBlurRadius?: number;
+  showSuggestedRoutine?: boolean;
+  showLastWorkout?: boolean;
+  showWeeklySummary?: boolean;
+  showQuickMusic?: boolean;
+  showRecentProgress?: boolean;
+  showMotivationalQuote?: boolean;
+}
+
+export interface MotivationalQuote {
+  id: number;
+  text: string;
+  isDefault: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateMotivationalQuoteInput {
+  text: string;
+}
+
+export interface UpdateMotivationalQuoteInput {
+  id: number;
+  text: string;
 }
 
 export interface ActiveWorkoutSetDraft {

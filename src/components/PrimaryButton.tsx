@@ -28,16 +28,23 @@ export function PrimaryButton({ label, onPress, disabled, style }: PrimaryButton
 const styles = StyleSheet.create({
   button: {
     backgroundColor: theme.colors.accent,
-    borderRadius: theme.radii.md,
-    minHeight: 48,
+    borderRadius: theme.radii.lg,
+    minHeight: 54,
     paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: theme.colors.shadow,
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
   },
   label: {
     color: theme.colors.white,
     fontSize: 16,
     fontWeight: "700",
+    letterSpacing: 0.2,
   },
   pressed: {
     opacity: 0.9,
@@ -47,4 +54,3 @@ const styles = StyleSheet.create({
     opacity: 0.45,
   },
 });
-

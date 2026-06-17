@@ -50,39 +50,47 @@ export function ExerciseFormScreen({ navigation, route }: Props) {
         return;
       }
 
-      const equipmentList = await listEquipment(profile.id, {});
-      setAvailableEquipment(equipmentList);
+      try {
+        const equipmentList = await listEquipment(profile.id, {});
+        setAvailableEquipment(equipmentList);
 
-      if (!exerciseId) {
-        return;
-      }
+        if (!exerciseId) {
+          return;
+        }
 
-      const exercise = await getExerciseById(exerciseId);
+        const exercise = await getExerciseById(exerciseId);
 
-      if (!exercise) {
-        Alert.alert("Ejercicio no encontrado", "No se ha podido cargar el ejercicio.");
+        if (!exercise) {
+          Alert.alert("Ejercicio no encontrado", "No se ha podido cargar el ejercicio.");
+          navigation.goBack();
+          return;
+        }
+
+        const [exerciseEquipment, exerciseMedia] = await Promise.all([
+          getEquipmentForExercise(exerciseId),
+          getMediaForExercise(exerciseId),
+        ]);
+
+        setName(exercise.name);
+        setMuscleGroup(exercise.muscleGroup);
+        setType(exercise.type);
+        setDescription(exercise.description ?? "");
+        setTechnicalNotes(exercise.technicalNotes ?? "");
+        setExecutionTips(exercise.executionTips ?? "");
+        setDefaultRestSeconds(
+          exercise.defaultRestSeconds ? String(exercise.defaultRestSeconds) : "",
+        );
+        setIsFavorite(exercise.isFavorite);
+        setIsActive(exercise.isActive);
+        setSelectedEquipmentIds(exerciseEquipment.map((item) => item.id));
+        setMedia(exerciseMedia);
+      } catch (error) {
+        Alert.alert(
+          "No se pudo cargar",
+          error instanceof Error ? error.message : "Inténtalo de nuevo.",
+        );
         navigation.goBack();
-        return;
       }
-
-      const [exerciseEquipment, exerciseMedia] = await Promise.all([
-        getEquipmentForExercise(exerciseId),
-        getMediaForExercise(exerciseId),
-      ]);
-
-      setName(exercise.name);
-      setMuscleGroup(exercise.muscleGroup);
-      setType(exercise.type);
-      setDescription(exercise.description ?? "");
-      setTechnicalNotes(exercise.technicalNotes ?? "");
-      setExecutionTips(exercise.executionTips ?? "");
-      setDefaultRestSeconds(
-        exercise.defaultRestSeconds ? String(exercise.defaultRestSeconds) : "",
-      );
-      setIsFavorite(exercise.isFavorite);
-      setIsActive(exercise.isActive);
-      setSelectedEquipmentIds(exerciseEquipment.map((item) => item.id));
-      setMedia(exerciseMedia);
     };
 
     void load();
@@ -123,8 +131,15 @@ export function ExerciseFormScreen({ navigation, route }: Props) {
       return;
     }
 
-    await removeExerciseMedia(exerciseId);
-    setMedia(null);
+    try {
+      await removeExerciseMedia(exerciseId);
+      setMedia(null);
+    } catch (error) {
+      Alert.alert(
+        "No se pudo eliminar",
+        error instanceof Error ? error.message : "Inténtalo de nuevo.",
+      );
+    }
   };
 
   const handleSave = async () => {
@@ -134,6 +149,21 @@ export function ExerciseFormScreen({ navigation, route }: Props) {
 
     if (!name.trim()) {
       Alert.alert("Nombre obligatorio", "El nombre del ejercicio es obligatorio.");
+      return;
+    }
+
+    const parsedRestSeconds = defaultRestSeconds.trim()
+      ? Number(defaultRestSeconds)
+      : null;
+
+    if (
+      parsedRestSeconds !== null &&
+      (!Number.isFinite(parsedRestSeconds) || parsedRestSeconds < 0)
+    ) {
+      Alert.alert(
+        "Descanso inválido",
+        "Introduce un número válido de segundos o deja el campo vacío.",
+      );
       return;
     }
 
@@ -148,9 +178,7 @@ export function ExerciseFormScreen({ navigation, route }: Props) {
         description,
         technicalNotes,
         executionTips,
-        defaultRestSeconds: defaultRestSeconds.trim()
-          ? Number(defaultRestSeconds)
-          : null,
+        defaultRestSeconds: parsedRestSeconds,
         isFavorite,
         isActive,
       };

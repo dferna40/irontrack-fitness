@@ -13,12 +13,16 @@ export function Card({ children, style }: CardProps) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.surfaceElevated,
     borderRadius: theme.radii.lg,
     borderWidth: 1,
-    borderColor: theme.colors.border,
-    padding: theme.spacing.lg,
+    borderColor: theme.colors.borderStrong,
+    padding: theme.spacing.xl,
     gap: theme.spacing.md,
+    shadowColor: theme.colors.shadow,
+    shadowOpacity: 0.2,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 3,
   },
 });
-

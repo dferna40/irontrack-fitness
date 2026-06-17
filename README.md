@@ -1,77 +1,158 @@
 # IronTrack Fitness
 
-App mvil con React Native + Expo pensada para gestionar entrenamientos en un gimnasio personal en casa, con enfoque offline y uso rpido en Android.
+IronTrack Fitness es una app movil para gestionar entrenamientos en un gimnasio personal en casa.
+Esta pensada para uso rapido en Android durante entrenamientos reales, con funcionamiento
+principalmente offline y sin depender de backend en la primera version.
 
-## Stack actual
+## Tecnologias usadas
 
-- Expo
 - React Native
+- Expo
+- TypeScript
 - React Navigation
 - SQLite local con `expo-sqlite`
-- TypeScript
+- Expo File System
+- Expo Image Picker
+- Expo Image Manipulator
+- Expo Notifications
+- Expo Keep Awake
+- Expo Sharing
+- Expo Linear Gradient
 
-## Estructura base
-
-```text
-src/
-  components/
-  database/
-  navigation/
-  repositories/
-  screens/
-  seed/
-  services/
-  theme/
-  types/
-  utils/
-```
-
-## Funcionalidad incluida en esta fase
-
-- Estructura inicial del proyecto Expo
-- Tema oscuro base
-- Navegacin principal para mvil
-- Inicializacin de SQLite al arrancar
-- Tabla `user_profiles`
-- Tabla `equipment`
-- Tabla `exercises`
-- Tabla `exercise_equipment`
-- Tabla `exercise_media`
-- Repositorios bsicos de perfil, material, ejercicios y media
-- Onboarding local para crear perfil
-- Semilla inicial de material del gimnasio
-- Semilla inicial de ejercicios adaptados al gimnasio
-- Pantalla para listar, crear, editar, marcar favorito y desactivar material
-- Pantallas de ejercicios con filtros, detalle, edicin y vista tcnica
-- Recurso visual local principal por ejercicio con vista previa
-- Rutinas con detalle, edicin, duplicado y configuracin de ejercicios
-- Entrenamiento activo temporal con series en memoria y guardado al finalizar
-- Temporizador integrado con ajustes locales y avisos viables con Expo
-
-## Cmo arrancar la app
-
-1. Instala dependencias:
+## Instalacion de dependencias
 
 ```powershell
 npm.cmd install
 ```
 
-2. Arranca Expo:
+## Ejecucion en Android
+
+1. Arrancar Expo:
 
 ```powershell
 npm.cmd run start
 ```
 
-3. Para abrir Android cuando tengas el entorno preparado:
+2. Ejecutar en Android cuando el entorno este preparado:
 
 ```powershell
 npm.cmd run android
 ```
 
-## Notas
+## Funcionalidades implementadas
 
-- La app est pensada primero para Android.
-- No hay backend, login online, JWT ni sincronizacin en esta fase.
-- La base de datos es local y funciona offline.
-- Los avisos del temporizador usan vibracin y notificaciones locales cuando el usuario concede permisos.
-- El sonido se apoya en la notificacin local por defecto del sistema cuando est activada; en primer plano puede depender del comportamiento del dispositivo y del permiso de notificaciones.
+- Onboarding local para crear perfil.
+- Base de datos SQLite inicializada al arrancar.
+- Gestion de perfil local.
+- Gestion de material del gimnasio:
+  - listado
+  - filtros
+  - favoritos
+  - alta y edicion
+  - desactivacion
+- Semilla inicial de material.
+- Gestion de ejercicios:
+  - listado
+  - busqueda
+  - filtros por grupo, tipo y material
+  - detalle
+  - alta y edicion
+  - favoritos
+  - desactivacion
+- Relacion ejercicios-material.
+- Semilla inicial de ejercicios.
+- Recurso visual principal por ejercicio:
+  - seleccion local
+  - validacion basica
+  - almacenamiento local
+  - vista previa
+  - eliminacion
+- Vista tecnica de ejercicio.
+- Rutinas:
+  - tablas y repositorios
+  - semilla inicial
+  - listado
+  - detalle
+  - alta y edicion
+  - duplicado
+  - reordenacion simple
+- Entrenamiento activo desde rutina.
+- Entrenamiento libre.
+- Registro de series en memoria y guardado al finalizar.
+- Temporizador integrado con ajustes locales.
+- Configuracion de temporizador.
+- Historial de entrenamientos.
+- Detalle de entrenamiento.
+- Progreso general.
+- Progreso por ejercicio.
+- Recomendaciones basicas de progresion.
+- Cardio basico con guardado local.
+- Boxeo por rondas con guardado local.
+- Musica externa mediante URLs y apertura con `Linking.openURL`.
+- Configuracion principal organizada por secciones.
+- Configuracion de apariencia:
+  - tema
+  - color principal
+  - estilo de tarjetas
+  - tamano de texto
+  - estilo de temporizador
+  - fondo personalizado
+  - bloques visibles en Inicio
+- Inicio personalizable.
+- Frases motivacionales:
+  - activacion
+  - frases predeterminadas
+  - frases personalizadas
+  - alta, edicion y borrado
+- Exportacion de entrenamientos a CSV.
+- Restauracion y borrado seguro de datos:
+  - restaurar ejercicios iniciales
+  - restaurar material inicial
+  - borrar historial
+  - reiniciar todos los datos con confirmacion
+
+## Funcionalidades pendientes
+
+- Copia de seguridad JSON completa:
+  - exportacion
+  - importacion
+  - validacion de estructura
+  - confirmacion de sobrescritura
+- Aplicacion global real de todas las preferencias de apariencia a toda la UI.
+- Personalizacion visual avanzada.
+- Exportacion e importacion completa de todos los datos de la app.
+- Sincronizacion en la nube.
+- Backend.
+- Login online.
+- Pagos.
+- IA.
+
+## Estructura de carpetas
+
+```text
+src/
+  components/      Componentes reutilizables de UI
+  database/        Cliente SQLite y migraciones
+  navigation/      Navegacion principal
+  repositories/    Acceso a datos SQLite
+  screens/         Pantallas de la app
+  seed/            Semillas iniciales
+  services/        Logica de aplicacion y utilidades de flujo
+  theme/           Colores, espaciado y tema base
+  types/           Tipos y modelos
+  utils/           Constantes y helpers
+```
+
+## Notas tecnicas importantes
+
+- La app esta pensada primero para Android.
+- No hay backend ni sincronizacion en esta fase.
+- El almacenamiento principal es SQLite local.
+- La app funciona offline.
+- Algunas configuraciones visuales ya se guardan, pero no todas se aplican todavia a toda la app.
+- El recurso visual de ejercicios y el fondo personalizado se guardan en almacenamiento local de la app.
+- Las notificaciones del temporizador dependen de permisos del dispositivo.
+- La musica no se reproduce dentro de la app:
+  solo se abren URLs externas.
+- El reinicio total de datos elimina tambien ajustes, historial y archivos locales asociados.
+- Se ha priorizado no rehacer arquitectura ya funcional y crecer por fases.

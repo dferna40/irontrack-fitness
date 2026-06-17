@@ -69,29 +69,37 @@ export function RoutineFormScreen({ navigation, route }: Props) {
         return;
       }
 
-      const exerciseRows = await listExercises(profile.id, { onlyActive: true });
-      setAvailableExercises(exerciseRows);
+      try {
+        const exerciseRows = await listExercises(profile.id, { onlyActive: true });
+        setAvailableExercises(exerciseRows);
 
-      if (!routineId) {
-        return;
-      }
+        if (!routineId) {
+          return;
+        }
 
-      const [routine, routineItems] = await Promise.all([
-        getRoutineById(routineId),
-        getExercisesForRoutine(routineId),
-      ]);
+        const [routine, routineItems] = await Promise.all([
+          getRoutineById(routineId),
+          getExercisesForRoutine(routineId),
+        ]);
 
-      if (!routine) {
-        Alert.alert("Rutina no encontrada", "No se ha podido cargar la rutina.");
+        if (!routine) {
+          Alert.alert("Rutina no encontrada", "No se ha podido cargar la rutina.");
+          navigation.goBack();
+          return;
+        }
+
+        setName(routine.name);
+        setDescription(routine.description ?? "");
+        setGoal(routine.goal ?? "");
+        setIsActive(routine.isActive);
+        setItems(routineItems.map(toDraftItem));
+      } catch (error) {
+        Alert.alert(
+          "No se pudo cargar",
+          error instanceof Error ? error.message : "Inténtalo de nuevo.",
+        );
         navigation.goBack();
-        return;
       }
-
-      setName(routine.name);
-      setDescription(routine.description ?? "");
-      setGoal(routine.goal ?? "");
-      setIsActive(routine.isActive);
-      setItems(routineItems.map(toDraftItem));
     };
 
     void load();
@@ -156,20 +164,27 @@ export function RoutineFormScreen({ navigation, route }: Props) {
     setItems(normalized);
 
     if (routineId) {
-      await replaceRoutineExercises(
-        routineId,
-        normalized.map((item) => ({
+      try {
+        await replaceRoutineExercises(
           routineId,
-          exerciseId: item.exerciseId,
-          exerciseOrder: item.exerciseOrder,
-          targetSets: item.targetSets ? Number(item.targetSets) : null,
-          targetRepsMin: item.targetRepsMin ? Number(item.targetRepsMin) : null,
-          targetRepsMax: item.targetRepsMax ? Number(item.targetRepsMax) : null,
-          targetWeight: item.targetWeight ? Number(item.targetWeight) : null,
-          restSeconds: item.restSeconds ? Number(item.restSeconds) : null,
-          notes: item.notes,
-        })),
-      );
+          normalized.map((item) => ({
+            routineId,
+            exerciseId: item.exerciseId,
+            exerciseOrder: item.exerciseOrder,
+            targetSets: item.targetSets ? Number(item.targetSets) : null,
+            targetRepsMin: item.targetRepsMin ? Number(item.targetRepsMin) : null,
+            targetRepsMax: item.targetRepsMax ? Number(item.targetRepsMax) : null,
+            targetWeight: item.targetWeight ? Number(item.targetWeight) : null,
+            restSeconds: item.restSeconds ? Number(item.restSeconds) : null,
+            notes: item.notes,
+          })),
+        );
+      } catch (error) {
+        Alert.alert(
+          "No se pudo reordenar",
+          error instanceof Error ? error.message : "Inténtalo de nuevo.",
+        );
+      }
     }
   };
 
@@ -180,6 +195,66 @@ export function RoutineFormScreen({ navigation, route }: Props) {
     if (!name.trim()) {
       Alert.alert("Nombre obligatorio", "La rutina necesita un nombre.");
       return;
+    }
+
+    for (const item of items) {
+      const targetSets = item.targetSets ? Number(item.targetSets) : null;
+      const targetRepsMin = item.targetRepsMin ? Number(item.targetRepsMin) : null;
+      const targetRepsMax = item.targetRepsMax ? Number(item.targetRepsMax) : null;
+      const targetWeight = item.targetWeight ? Number(item.targetWeight) : null;
+      const restSeconds = item.restSeconds ? Number(item.restSeconds) : null;
+
+      if (targetSets !== null && (!Number.isFinite(targetSets) || targetSets <= 0)) {
+        Alert.alert(
+          "Series inválidas",
+          `Revisa las series objetivo de ${item.exerciseName}.`,
+        );
+        return;
+      }
+
+      if (
+        targetRepsMin !== null &&
+        (!Number.isFinite(targetRepsMin) || targetRepsMin < 0)
+      ) {
+        Alert.alert(
+          "Repeticiones inválidas",
+          `Revisa las repeticiones mínimas de ${item.exerciseName}.`,
+        );
+        return;
+      }
+
+      if (
+        targetRepsMax !== null &&
+        (!Number.isFinite(targetRepsMax) || targetRepsMax < 0)
+      ) {
+        Alert.alert(
+          "Repeticiones inválidas",
+          `Revisa las repeticiones máximas de ${item.exerciseName}.`,
+        );
+        return;
+      }
+
+      if (
+        targetRepsMin !== null &&
+        targetRepsMax !== null &&
+        targetRepsMax < targetRepsMin
+      ) {
+        Alert.alert(
+          "Rango inválido",
+          `Las repeticiones máximas no pueden ser menores que las mínimas en ${item.exerciseName}.`,
+        );
+        return;
+      }
+
+      if (targetWeight !== null && (!Number.isFinite(targetWeight) || targetWeight < 0)) {
+        Alert.alert("Peso inválido", `Revisa el peso objetivo de ${item.exerciseName}.`);
+        return;
+      }
+
+      if (restSeconds !== null && (!Number.isFinite(restSeconds) || restSeconds < 0)) {
+        Alert.alert("Descanso inválido", `Revisa el descanso de ${item.exerciseName}.`);
+        return;
+      }
     }
 
     try {
@@ -231,8 +306,15 @@ export function RoutineFormScreen({ navigation, route }: Props) {
     if (!routineId) {
       return;
     }
-    const duplicated = await duplicateRoutine(routineId);
-    navigation.navigate("RoutineDetail", { routineId: duplicated.id });
+    try {
+      const duplicated = await duplicateRoutine(routineId);
+      navigation.navigate("RoutineDetail", { routineId: duplicated.id });
+    } catch (error) {
+      Alert.alert(
+        "No se pudo duplicar",
+        error instanceof Error ? error.message : "Inténtalo de nuevo.",
+      );
+    }
   };
 
   return (

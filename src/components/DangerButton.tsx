@@ -28,11 +28,17 @@ export function DangerButton({ label, onPress, disabled, style }: DangerButtonPr
 const styles = StyleSheet.create({
   button: {
     backgroundColor: theme.colors.danger,
-    borderRadius: theme.radii.md,
-    minHeight: 48,
+    borderRadius: theme.radii.lg,
+    minHeight: 52,
     paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
     alignItems: "center",
     justifyContent: "center",
+    shadowColor: theme.colors.shadow,
+    shadowOpacity: 0.16,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
   },
   label: {
     color: theme.colors.white,
@@ -40,10 +46,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
   pressed: {
-    opacity: 0.9,
+    opacity: 0.92,
+    transform: [{ scale: 0.99 }],
   },
   disabled: {
     opacity: 0.45,
   },
 });
-

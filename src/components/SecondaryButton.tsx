@@ -32,12 +32,13 @@ export function SecondaryButton({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: theme.colors.surfaceElevated,
+    backgroundColor: theme.colors.surface,
     borderWidth: 1,
-    borderColor: theme.colors.border,
-    borderRadius: theme.radii.md,
-    minHeight: 48,
+    borderColor: theme.colors.borderStrong,
+    borderRadius: theme.radii.lg,
+    minHeight: 52,
     paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -45,12 +46,13 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     fontSize: 16,
     fontWeight: "600",
+    letterSpacing: 0.15,
   },
   pressed: {
-    opacity: 0.9,
+    opacity: 0.92,
+    transform: [{ scale: 0.99 }],
   },
   disabled: {
     opacity: 0.45,
   },
 });
-

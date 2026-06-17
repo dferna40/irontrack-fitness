@@ -67,7 +67,7 @@ export function TimerCard({
   }, [isFinished, isRunning]);
 
   return (
-    <Card>
+    <Card style={styles.card}>
       <Text style={styles.label}>Descanso</Text>
       <Text style={styles.time}>{formatTime(secondsLeft)}</Text>
       <Text style={styles.status}>{statusLabel}</Text>
@@ -113,6 +113,9 @@ export function TimerCard({
 }
 
 const styles = StyleSheet.create({
+  card: {
+    backgroundColor: theme.colors.surface,
+  },
   label: {
     color: theme.colors.text,
     fontSize: 18,
@@ -121,13 +124,14 @@ const styles = StyleSheet.create({
   },
   time: {
     color: theme.colors.accent,
-    fontSize: 44,
+    fontSize: 48,
     fontWeight: "800",
     textAlign: "center",
   },
   status: {
     color: theme.colors.textMuted,
     textAlign: "center",
+    fontSize: 14,
   },
   row: {
     flexDirection: "row",
@@ -136,6 +140,6 @@ const styles = StyleSheet.create({
   },
   button: {
     flexGrow: 1,
-    flexBasis: 120,
+    flexBasis: 132,
   },
 });

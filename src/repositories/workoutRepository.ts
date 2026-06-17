@@ -129,6 +129,33 @@ interface ExerciseProgressDetailRow {
   reps: number;
 }
 
+export interface WorkoutCsvExportRow {
+  date: string;
+  workoutType: Workout["workoutType"];
+  routineName: string | null;
+  exerciseName: string;
+  setNumber: number;
+  weight: number;
+  reps: number;
+  difficulty: Workout["difficulty"];
+  discomfortLevel: Workout["discomfortLevel"];
+  notes: string | null;
+}
+
+interface WorkoutCsvExportRowDb {
+  date: string;
+  workout_type: Workout["workoutType"];
+  routine_name: string | null;
+  exercise_name: string;
+  set_number: number;
+  weight: number;
+  reps: number;
+  difficulty: Workout["difficulty"];
+  discomfort_level: Workout["discomfortLevel"];
+  workout_notes: string | null;
+  set_notes: string | null;
+}
+
 function mapWorkoutHistory(row: WorkoutHistoryRow): WorkoutHistoryItem {
   return {
     id: row.id,
@@ -589,4 +616,44 @@ export async function getExerciseProgressDetail(profileId: number, exerciseId: n
   };
 
   return detail;
+}
+
+export async function listWorkoutsForCsvExport(profileId: number) {
+  const db = await getDatabase();
+  const rows = await db.getAllAsync<WorkoutCsvExportRowDb>(
+    `
+      SELECT
+        w.date,
+        w.workout_type,
+        r.name AS routine_name,
+        e.name AS exercise_name,
+        ws.set_number,
+        ws.weight,
+        ws.reps,
+        w.difficulty,
+        w.discomfort_level,
+        w.notes AS workout_notes,
+        ws.notes AS set_notes
+      FROM workouts w
+      INNER JOIN workout_sets ws ON ws.workout_id = w.id
+      INNER JOIN exercises e ON e.id = ws.exercise_id
+      LEFT JOIN routines r ON r.id = w.routine_id
+      WHERE w.profile_id = ?
+      ORDER BY w.started_at DESC, w.id DESC, e.name COLLATE NOCASE ASC, ws.set_number ASC;
+    `,
+    [profileId],
+  );
+
+  return rows.map((row) => ({
+    date: row.date,
+    workoutType: row.workout_type,
+    routineName: row.routine_name,
+    exerciseName: row.exercise_name,
+    setNumber: row.set_number,
+    weight: row.weight,
+    reps: row.reps,
+    difficulty: row.difficulty,
+    discomfortLevel: row.discomfort_level,
+    notes: [row.workout_notes, row.set_notes].filter(Boolean).join(" | ") || null,
+  })) satisfies WorkoutCsvExportRow[];
 }

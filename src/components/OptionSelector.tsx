@@ -30,7 +30,11 @@ export function OptionSelector<T extends string>({
             <Pressable
               key={option.value}
               onPress={() => onChange(option.value)}
-              style={[styles.option, isSelected && styles.optionSelected]}
+              style={({ pressed }) => [
+                styles.option,
+                isSelected && styles.optionSelected,
+                pressed && styles.optionPressed,
+              ]}
             >
               <Text style={[styles.optionLabel, isSelected && styles.optionLabelSelected]}>
                 {option.label}
@@ -58,16 +62,22 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
   },
   option: {
+    minHeight: 42,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: 10,
     borderRadius: theme.radii.pill,
     borderWidth: 1,
     borderColor: theme.colors.border,
-    backgroundColor: theme.colors.surfaceElevated,
+    backgroundColor: theme.colors.surface,
+    alignItems: "center",
+    justifyContent: "center",
   },
   optionSelected: {
     backgroundColor: theme.colors.accentSoft,
     borderColor: theme.colors.accent,
+  },
+  optionPressed: {
+    opacity: 0.92,
   },
   optionLabel: {
     color: theme.colors.textMuted,

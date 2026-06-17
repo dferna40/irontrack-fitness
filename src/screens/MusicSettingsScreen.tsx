@@ -24,7 +24,36 @@ export function MusicSettingsScreen() {
     setStretchingPlaylistUrl(settings.stretchingPlaylistUrl ?? "");
   }, [settings]);
 
+  const isValidExternalUrl = (value: string) => {
+    if (!value.trim()) {
+      return true;
+    }
+
+    try {
+      const url = new URL(value.trim());
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch {
+      return false;
+    }
+  };
+
   const handleSave = async () => {
+    const entries = [
+      { label: "Playlist de pesas", value: weightsPlaylistUrl },
+      { label: "Playlist de cardio", value: cardioPlaylistUrl },
+      { label: "Playlist de boxeo", value: boxingPlaylistUrl },
+      { label: "Playlist de estiramientos", value: stretchingPlaylistUrl },
+    ];
+
+    const invalid = entries.find((entry) => !isValidExternalUrl(entry.value));
+    if (invalid) {
+      Alert.alert(
+        "URL inválida",
+        `${invalid.label} debe empezar por http:// o https://`,
+      );
+      return;
+    }
+
     await saveSettings({
       weightsPlaylistUrl: weightsPlaylistUrl.trim() || null,
       cardioPlaylistUrl: cardioPlaylistUrl.trim() || null,

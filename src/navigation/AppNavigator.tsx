@@ -20,6 +20,7 @@ import { FreeWorkoutSetupScreen } from "../screens/FreeWorkoutSetupScreen";
 import { HistoryScreen } from "../screens/HistoryScreen";
 import { HomeScreen } from "../screens/HomeScreen";
 import { MusicSettingsScreen } from "../screens/MusicSettingsScreen";
+import { MotivationalQuotesScreen } from "../screens/MotivationalQuotesScreen";
 import { OnboardingScreen } from "../screens/OnboardingScreen";
 import { ProfileSettingsScreen } from "../screens/ProfileSettingsScreen";
 import { ProgressScreen } from "../screens/ProgressScreen";
@@ -66,6 +67,7 @@ export type RootStackParamList = {
   ProfileSettings: undefined;
   ProgressionSettings: undefined;
   AppearanceSettings: undefined;
+  MotivationalQuotesSettings: undefined;
   DataBackup: undefined;
   About: undefined;
 };
@@ -292,6 +294,11 @@ export function AppNavigator() {
             name="AppearanceSettings"
             component={AppearanceSettingsScreen}
             options={{ title: "Apariencia" }}
+          />
+          <Stack.Screen
+            name="MotivationalQuotesSettings"
+            component={MotivationalQuotesScreen}
+            options={{ title: "Frases motivacionales" }}
           />
           <Stack.Screen
             name="DataBackup"

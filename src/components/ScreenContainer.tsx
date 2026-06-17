@@ -40,8 +40,9 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     backgroundColor: theme.colors.background,
-    padding: theme.spacing.lg,
-    gap: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.lg,
+    paddingBottom: theme.spacing.xxxl,
+    gap: theme.spacing.xl,
   },
 });
-
