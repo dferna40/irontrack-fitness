@@ -546,6 +546,38 @@ export async function listExerciseProgressSummary(profileId: number) {
   return rows.map(mapExerciseProgressSummary);
 }
 
+export async function getLastWeightUsedMap(profileId: number, exerciseIds: number[]) {
+  if (!exerciseIds.length) {
+    return new Map<number, number>();
+  }
+
+  const db = await getDatabase();
+  const placeholders = exerciseIds.map(() => "?").join(", ");
+  const rows = await db.getAllAsync<{
+    exercise_id: number;
+    weight: number;
+  }>(
+    `
+      SELECT ws.exercise_id, ws.weight
+      FROM workout_sets ws
+      INNER JOIN workouts w ON w.id = ws.workout_id
+      WHERE w.profile_id = ?
+        AND ws.exercise_id IN (${placeholders})
+      ORDER BY w.started_at DESC, ws.set_number DESC, ws.id DESC;
+    `,
+    [profileId, ...exerciseIds],
+  );
+
+  const map = new Map<number, number>();
+  for (const row of rows) {
+    if (!map.has(row.exercise_id)) {
+      map.set(row.exercise_id, row.weight);
+    }
+  }
+
+  return map;
+}
+
 export async function getExerciseProgressDetail(profileId: number, exerciseId: number) {
   const db = await getDatabase();
   const rows = await db.getAllAsync<ExerciseProgressDetailRow>(

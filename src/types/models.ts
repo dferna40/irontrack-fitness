@@ -348,6 +348,8 @@ export interface AppSettings {
   quickAdd15Enabled: boolean;
   quickAdd30Enabled: boolean;
   quickAdd60Enabled: boolean;
+  rememberFocusMode: boolean;
+  largeSessionThumbnails: boolean;
   weightsPlaylistUrl: string | null;
   cardioPlaylistUrl: string | null;
   boxingPlaylistUrl: string | null;
@@ -367,6 +369,8 @@ export interface UpdateAppSettingsInput {
   quickAdd15Enabled?: boolean;
   quickAdd30Enabled?: boolean;
   quickAdd60Enabled?: boolean;
+  rememberFocusMode?: boolean;
+  largeSessionThumbnails?: boolean;
   weightsPlaylistUrl?: string | null;
   cardioPlaylistUrl?: string | null;
   boxingPlaylistUrl?: string | null;

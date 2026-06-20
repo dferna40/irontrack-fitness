@@ -9,7 +9,9 @@ import { SecondaryButton } from "../components/SecondaryButton";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { duplicateRoutine } from "../repositories/routineRepository";
 import { getExercisesForRoutine } from "../repositories/routineExerciseRepository";
+import { getLastWeightUsedMap } from "../repositories/workoutRepository";
 import { getRoutineById } from "../repositories/routineRepository";
+import { useAppState } from "../services/app-state";
 import { useTrainingSession } from "../services/training-session";
 import { theme } from "../theme";
 import { ActiveWorkoutExercise, Routine, RoutineExerciseWithExercise } from "../types/models";
@@ -48,6 +50,7 @@ function toActiveExercise(item: RoutineExerciseWithExercise): ActiveWorkoutExerc
 export function RoutineDetailScreen({ navigation, route }: Props) {
   const [routine, setRoutine] = useState<Routine | null>(null);
   const [items, setItems] = useState<RoutineExerciseWithExercise[]>([]);
+  const { profile } = useAppState();
   const { startRoutineWorkout } = useTrainingSession();
 
   const loadRoutine = useCallback(async () => {
@@ -74,19 +77,41 @@ export function RoutineDetailScreen({ navigation, route }: Props) {
     );
   }
 
-  const handleStartRoutine = () => {
+  const handleStartRoutine = async () => {
     if (!items.length) {
       Alert.alert("Sin ejercicios", "La rutina no tiene ejercicios para empezar.");
       return;
     }
 
-    startRoutineWorkout({
-      routineId: routine.id,
-      routineName: routine.name,
-      workoutType: "routine",
-      exercises: items.map(toActiveExercise),
-    });
-    navigation.navigate("ActiveWorkout");
+    try {
+      const lastWeightMap = profile
+        ? await getLastWeightUsedMap(
+            profile.id,
+            items.map((item) => item.exerciseId),
+          )
+        : new Map<number, number>();
+
+      startRoutineWorkout({
+        routineId: routine.id,
+        routineName: routine.name,
+        workoutType: "routine",
+        exercises: items.map((item) => {
+          const activeExercise = toActiveExercise(item);
+          const lastWeightUsed = lastWeightMap.get(item.exerciseId);
+
+          return {
+            ...activeExercise,
+            targetWeight: lastWeightUsed ?? activeExercise.targetWeight,
+          };
+        }),
+      });
+      navigation.navigate("ActiveWorkout");
+    } catch (error) {
+      Alert.alert(
+        "No se pudo preparar el entrenamiento",
+        error instanceof Error ? error.message : "Intentalo de nuevo.",
+      );
+    }
   };
 
   const handleDuplicate = async () => {
@@ -159,7 +184,7 @@ export function RoutineDetailScreen({ navigation, route }: Props) {
         )}
       </Card>
 
-      <PrimaryButton label="Empezar rutina" onPress={handleStartRoutine} />
+      <PrimaryButton label="Empezar rutina" onPress={() => void handleStartRoutine()} />
       <SecondaryButton
         label="Editar rutina"
         onPress={() => navigation.navigate("RoutineForm", { routineId: routine.id })}

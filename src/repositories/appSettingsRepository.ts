@@ -13,6 +13,8 @@ interface AppSettingsRow {
   quick_add_15_enabled: number;
   quick_add_30_enabled: number;
   quick_add_60_enabled: number;
+  remember_focus_mode: number;
+  large_session_thumbnails: number;
   weights_playlist_url: string | null;
   cardio_playlist_url: string | null;
   boxing_playlist_url: string | null;
@@ -34,6 +36,8 @@ function mapRow(row: AppSettingsRow): AppSettings {
     quickAdd15Enabled: Boolean(row.quick_add_15_enabled),
     quickAdd30Enabled: Boolean(row.quick_add_30_enabled),
     quickAdd60Enabled: Boolean(row.quick_add_60_enabled),
+    rememberFocusMode: Boolean(row.remember_focus_mode),
+    largeSessionThumbnails: Boolean(row.large_session_thumbnails),
     weightsPlaylistUrl: row.weights_playlist_url,
     cardioPlaylistUrl: row.cardio_playlist_url,
     boxingPlaylistUrl: row.boxing_playlist_url,
@@ -80,6 +84,8 @@ export async function updateAppSettings(input: UpdateAppSettingsInput) {
         quick_add_15_enabled = ?,
         quick_add_30_enabled = ?,
         quick_add_60_enabled = ?,
+        remember_focus_mode = ?,
+        large_session_thumbnails = ?,
         weights_playlist_url = ?,
         cardio_playlist_url = ?,
         boxing_playlist_url = ?,
@@ -100,6 +106,8 @@ export async function updateAppSettings(input: UpdateAppSettingsInput) {
       (input.quickAdd15Enabled ?? current.quickAdd15Enabled) ? 1 : 0,
       (input.quickAdd30Enabled ?? current.quickAdd30Enabled) ? 1 : 0,
       (input.quickAdd60Enabled ?? current.quickAdd60Enabled) ? 1 : 0,
+      (input.rememberFocusMode ?? current.rememberFocusMode) ? 1 : 0,
+      (input.largeSessionThumbnails ?? current.largeSessionThumbnails) ? 1 : 0,
       input.weightsPlaylistUrl !== undefined
         ? input.weightsPlaylistUrl
         : current.weightsPlaylistUrl,

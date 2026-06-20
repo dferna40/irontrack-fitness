@@ -140,6 +140,10 @@ export function RoutineFormScreen({ navigation, route }: Props) {
     );
   };
 
+  const applyRestPreset = (index: number, seconds: number) => {
+    updateItem(index, "restSeconds", String(seconds));
+  };
+
   const removeItem = (index: number) => {
     setItems((current) =>
       current
@@ -393,6 +397,28 @@ export function RoutineFormScreen({ navigation, route }: Props) {
             <TextInput value={item.targetWeight} onChangeText={(value) => updateItem(index, "targetWeight", value)} placeholder="Peso objetivo" placeholderTextColor={theme.colors.textMuted} style={[styles.input, styles.smallInput]} keyboardType="decimal-pad" />
             <TextInput value={item.restSeconds} onChangeText={(value) => updateItem(index, "restSeconds", value)} placeholder="Descanso" placeholderTextColor={theme.colors.textMuted} style={[styles.input, styles.smallInput]} keyboardType="number-pad" />
           </View>
+          <View style={styles.restPresetRow}>
+            {[45, 60, 75, 90].map((seconds) => {
+              const selected = item.restSeconds === String(seconds);
+
+              return (
+                <Pressable
+                  key={seconds}
+                  onPress={() => applyRestPreset(index, seconds)}
+                  style={[styles.restPresetChip, selected && styles.restPresetChipSelected]}
+                >
+                  <Text
+                    style={[
+                      styles.restPresetChipLabel,
+                      selected && styles.restPresetChipLabelSelected,
+                    ]}
+                  >
+                    {seconds}s
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
           <TextInput
             value={item.notes}
             onChangeText={(value) => updateItem(index, "notes", value)}
@@ -448,6 +474,32 @@ const styles = StyleSheet.create({
   },
   smallInput: {
     minWidth: 90,
+  },
+  restPresetRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: theme.spacing.sm,
+  },
+  restPresetChip: {
+    borderRadius: theme.radii.pill,
+    borderWidth: 1,
+    borderColor: theme.colors.borderStrong,
+    backgroundColor: theme.colors.surface,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: 10,
+    minWidth: 68,
+    alignItems: "center",
+  },
+  restPresetChipSelected: {
+    borderColor: theme.colors.accent,
+    backgroundColor: theme.colors.accentSoft,
+  },
+  restPresetChipLabel: {
+    color: theme.colors.text,
+    fontWeight: "700",
+  },
+  restPresetChipLabelSelected: {
+    color: theme.colors.accent,
   },
   inlineButton: {
     flex: 1,

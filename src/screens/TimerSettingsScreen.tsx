@@ -20,6 +20,8 @@ export function TimerSettingsScreen() {
   const [quick15, setQuick15] = useState(true);
   const [quick30, setQuick30] = useState(true);
   const [quick60, setQuick60] = useState(true);
+  const [rememberFocusMode, setRememberFocusMode] = useState(false);
+  const [largeSessionThumbnails, setLargeSessionThumbnails] = useState(false);
 
   useEffect(() => {
     if (!settings) {
@@ -36,6 +38,8 @@ export function TimerSettingsScreen() {
     setQuick15(settings.quickAdd15Enabled);
     setQuick30(settings.quickAdd30Enabled);
     setQuick60(settings.quickAdd60Enabled);
+    setRememberFocusMode(settings.rememberFocusMode);
+    setLargeSessionThumbnails(settings.largeSessionThumbnails);
   }, [settings]);
 
   const handleSave = async () => {
@@ -69,6 +73,8 @@ export function TimerSettingsScreen() {
       quickAdd15Enabled: quick15,
       quickAdd30Enabled: quick30,
       quickAdd60Enabled: quick60,
+      rememberFocusMode,
+      largeSessionThumbnails,
     });
 
     await refreshSettings();
@@ -109,6 +115,16 @@ export function TimerSettingsScreen() {
           label="Mantener pantalla activa"
           value={keepScreenAwake}
           onValueChange={setKeepScreenAwake}
+        />
+        <SwitchRow
+          label="Recordar modo foco"
+          value={rememberFocusMode}
+          onValueChange={setRememberFocusMode}
+        />
+        <SwitchRow
+          label="Miniaturas grandes en Ver sesion"
+          value={largeSessionThumbnails}
+          onValueChange={setLargeSessionThumbnails}
         />
         <SwitchRow label="Boton rapido +15" value={quick15} onValueChange={setQuick15} />
         <SwitchRow label="Boton rapido +30" value={quick30} onValueChange={setQuick30} />

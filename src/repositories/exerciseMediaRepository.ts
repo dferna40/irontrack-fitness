@@ -47,6 +47,54 @@ export async function getMediaForExercise(exerciseId: number) {
   return row ? mapRow(row) : null;
 }
 
+export async function listExerciseIdsWithMedia(exerciseIds: number[]) {
+  if (!exerciseIds.length) {
+    return new Set<number>();
+  }
+
+  const db = await getDatabase();
+  const placeholders = exerciseIds.map(() => "?").join(", ");
+  const rows = await db.getAllAsync<{ exercise_id: number }>(
+    `SELECT exercise_id FROM exercise_media WHERE exercise_id IN (${placeholders});`,
+    exerciseIds,
+  );
+
+  return new Set(rows.map((row) => row.exercise_id));
+}
+
+export async function listExerciseMediaTypeMap(exerciseIds: number[]) {
+  if (!exerciseIds.length) {
+    return new Map<number, ExerciseMedia["mediaType"]>();
+  }
+
+  const db = await getDatabase();
+  const placeholders = exerciseIds.map(() => "?").join(", ");
+  const rows = await db.getAllAsync<{
+    exercise_id: number;
+    media_type: ExerciseMedia["mediaType"];
+  }>(
+    `SELECT exercise_id, media_type FROM exercise_media WHERE exercise_id IN (${placeholders});`,
+    exerciseIds,
+  );
+
+  return new Map(rows.map((row) => [row.exercise_id, row.media_type]));
+}
+
+export async function listExerciseMediaMap(exerciseIds: number[]) {
+  if (!exerciseIds.length) {
+    return new Map<number, ExerciseMedia>();
+  }
+
+  const db = await getDatabase();
+  const placeholders = exerciseIds.map(() => "?").join(", ");
+  const rows = await db.getAllAsync<ExerciseMediaRow>(
+    `SELECT * FROM exercise_media WHERE exercise_id IN (${placeholders});`,
+    exerciseIds,
+  );
+
+  return new Map(rows.map((row) => [row.exercise_id, mapRow(row)]));
+}
+
 export async function upsertExerciseMedia(input: UpsertExerciseMediaInput) {
   const db = await getDatabase();
   await db.runAsync(

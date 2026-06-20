@@ -48,7 +48,7 @@ export function HomeScreen() {
         if (appearanceSettings?.showSuggestedRoutine ?? true) {
           tasks.push(
             listRoutines(profile.id, { onlyActive: true }).then((routines) => {
-              setSuggestedRoutine(routines[0] ?? null);
+              setSuggestedRoutine(getSuggestedRoutineForToday(routines));
             }),
           );
         } else {
@@ -266,6 +266,39 @@ function formatDate(value: string) {
     month: "2-digit",
     year: "numeric",
   }).format(date);
+}
+
+function getSuggestedRoutineForToday(routines: Routine[]) {
+  if (!routines.length) {
+    return null;
+  }
+
+  const byName = new Map(routines.map((routine) => [routine.name, routine] as const));
+  const weekday = new Date().getDay();
+
+  const preferredNamesByDay = [
+    ["Dorsal", "Cardio VR"],
+    ["Pectoral", "Cardio VR"],
+    ["Dorsal", "Cardio VR"],
+    ["Piernas", "Cardio VR"],
+    ["Hombros y brazos", "Cardio VR"],
+    ["Viernes cardio y abdominales", "Cardio VR"],
+    ["Pectoral", "Cardio VR"],
+  ];
+
+  const preferredNames = preferredNamesByDay[weekday] ?? [];
+  for (const name of preferredNames) {
+    const routine = byName.get(name);
+    if (routine) {
+      return routine;
+    }
+  }
+
+  const firstStrengthRoutine = routines.find(
+    (routine) => routine.name !== "Cardio VR" && routine.name !== "Viernes cardio y abdominales",
+  );
+
+  return firstStrengthRoutine ?? routines[0];
 }
 
 const styles = StyleSheet.create({

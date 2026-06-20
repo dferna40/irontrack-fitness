@@ -38,9 +38,10 @@ interface TrainingSessionValue {
   startRoutineWorkout: (input: StartWorkoutInput) => void;
   updateDraftWeight: (delta: number) => void;
   updateDraftReps: (delta: number) => void;
-  completeCurrentSet: () => ActiveWorkoutSetDraft | null;
+  completeCurrentSet: (restSecondsUsed?: number) => ActiveWorkoutSetDraft | null;
   addExtraSet: () => void;
   goToNextExercise: () => void;
+  jumpToExercise: (exerciseIndex: number) => void;
   getCompletedSetsForExercise: (exerciseId: number) => ActiveWorkoutSetDraft[];
   updateCompletedSet: (exerciseId: number, setNumber: number, weight: number, reps: number) => void;
   removeCompletedSet: (exerciseId: number, setNumber: number) => void;
@@ -111,7 +112,7 @@ export function TrainingSessionProvider({ children }: { children: ReactNode }) {
     );
   };
 
-  const completeCurrentSet = () => {
+  const completeCurrentSet = (restSecondsUsed?: number) => {
     if (!session || !currentExercise) {
       return null;
     }
@@ -123,7 +124,7 @@ export function TrainingSessionProvider({ children }: { children: ReactNode }) {
       weight: session.draftWeight,
       reps: session.draftReps,
       completed: true,
-      restSecondsUsed: currentExercise.restSeconds,
+      restSecondsUsed: restSecondsUsed ?? currentExercise.restSeconds,
       notes: "",
     };
 
@@ -174,6 +175,17 @@ export function TrainingSessionProvider({ children }: { children: ReactNode }) {
 
       const nextIndex = Math.min(current.exercises.length - 1, current.currentExerciseIndex + 1);
       return syncDraftToExercise(current, nextIndex);
+    });
+  };
+
+  const jumpToExercise = (exerciseIndex: number) => {
+    setSession((current) => {
+      if (!current) {
+        return current;
+      }
+
+      const safeIndex = Math.max(0, Math.min(current.exercises.length - 1, exerciseIndex));
+      return syncDraftToExercise(current, safeIndex);
     });
   };
 
@@ -254,6 +266,7 @@ export function TrainingSessionProvider({ children }: { children: ReactNode }) {
       completeCurrentSet,
       addExtraSet,
       goToNextExercise,
+      jumpToExercise,
       getCompletedSetsForExercise,
       updateCompletedSet,
       removeCompletedSet,

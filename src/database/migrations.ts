@@ -191,6 +191,8 @@ export async function initDatabase() {
         quick_add_15_enabled INTEGER NOT NULL DEFAULT 1,
         quick_add_30_enabled INTEGER NOT NULL DEFAULT 1,
         quick_add_60_enabled INTEGER NOT NULL DEFAULT 1,
+        remember_focus_mode INTEGER NOT NULL DEFAULT 0,
+        large_session_thumbnails INTEGER NOT NULL DEFAULT 0,
         weights_playlist_url TEXT,
         cardio_playlist_url TEXT,
         boxing_playlist_url TEXT,
@@ -266,6 +268,18 @@ export async function initDatabase() {
     await ensureColumn(db, "app_settings", "cardio_playlist_url", "TEXT");
     await ensureColumn(db, "app_settings", "boxing_playlist_url", "TEXT");
     await ensureColumn(db, "app_settings", "stretching_playlist_url", "TEXT");
+    await ensureColumn(
+      db,
+      "app_settings",
+      "remember_focus_mode",
+      "INTEGER NOT NULL DEFAULT 0",
+    );
+    await ensureColumn(
+      db,
+      "app_settings",
+      "large_session_thumbnails",
+      "INTEGER NOT NULL DEFAULT 0",
+    );
     await ensureColumn(db, "appearance_settings", "background_mode", "TEXT NOT NULL DEFAULT 'default'");
     await ensureColumn(
       db,
