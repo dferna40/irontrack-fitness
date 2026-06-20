@@ -1,5 +1,7 @@
-import { ReactNode } from "react";
-import { SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
+import { ReactNode, useContext } from "react";
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import { theme } from "../theme";
 
 interface ScreenContainerProps {
@@ -11,18 +13,28 @@ export function ScreenContainer({
   children,
   scrollable = true,
 }: ScreenContainerProps) {
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0;
+  const contentStyle = [
+    styles.content,
+    {
+      paddingBottom:
+        theme.spacing.xxxl + insets.bottom + (tabBarHeight > 0 ? tabBarHeight : 0),
+    },
+  ];
+
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={["top", "left", "right"]}>
       {scrollable ? (
         <ScrollView
-          contentContainerStyle={styles.content}
+          contentContainerStyle={contentStyle}
           style={styles.scroll}
           keyboardShouldPersistTaps="handled"
         >
           {children}
         </ScrollView>
       ) : (
-        <View style={styles.content}>{children}</View>
+        <View style={contentStyle}>{children}</View>
       )}
     </SafeAreaView>
   );
@@ -42,7 +54,6 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
     paddingHorizontal: theme.spacing.lg,
     paddingTop: theme.spacing.lg,
-    paddingBottom: theme.spacing.xxxl,
     gap: theme.spacing.xl,
   },
 });

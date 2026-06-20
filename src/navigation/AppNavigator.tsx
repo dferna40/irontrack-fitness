@@ -1,6 +1,7 @@
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Text } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { ActiveWorkoutScreen } from "../screens/ActiveWorkoutScreen";
 import { AboutScreen } from "../screens/AboutScreen";
@@ -19,8 +20,8 @@ import { ExercisesScreen } from "../screens/ExercisesScreen";
 import { FreeWorkoutSetupScreen } from "../screens/FreeWorkoutSetupScreen";
 import { HistoryScreen } from "../screens/HistoryScreen";
 import { HomeScreen } from "../screens/HomeScreen";
-import { MusicSettingsScreen } from "../screens/MusicSettingsScreen";
 import { MotivationalQuotesScreen } from "../screens/MotivationalQuotesScreen";
+import { MusicSettingsScreen } from "../screens/MusicSettingsScreen";
 import { OnboardingScreen } from "../screens/OnboardingScreen";
 import { ProfileSettingsScreen } from "../screens/ProfileSettingsScreen";
 import { ProgressScreen } from "../screens/ProgressScreen";
@@ -83,6 +84,23 @@ export type AppTabParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<AppTabParamList>();
 
+function getTabIconName(routeName: keyof AppTabParamList) {
+  switch (routeName) {
+    case "Inicio":
+      return "home-variant-outline";
+    case "Entrenar":
+      return "dumbbell";
+    case "Ejercicios":
+      return "arm-flex-outline";
+    case "Rutinas":
+      return "clipboard-text-outline";
+    case "Configuracion":
+      return "cog-outline";
+    default:
+      return "circle-outline";
+  }
+}
+
 function HeaderAction({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <PrimaryButton
@@ -94,16 +112,18 @@ function HeaderAction({ label, onPress }: { label: string; onPress: () => void }
 }
 
 function AppTabsNavigator() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         headerStyle: { backgroundColor: theme.colors.surface },
         headerTintColor: theme.colors.text,
         tabBarStyle: {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.border,
-          height: 72,
-          paddingBottom: 8,
+          height: 64 + insets.bottom,
+          paddingBottom: Math.max(insets.bottom, 8),
           paddingTop: 8,
         },
         tabBarActiveTintColor: theme.colors.accent,
@@ -112,8 +132,14 @@ function AppTabsNavigator() {
           fontSize: 12,
           fontWeight: "600",
         },
-        tabBarIcon: ({ color }) => <Text style={{ color, fontSize: 14 }}>•</Text>,
-      }}
+        tabBarIcon: ({ color, size, focused }) => (
+          <MaterialCommunityIcons
+            name={getTabIconName(route.name)}
+            color={color}
+            size={focused ? size + 2 : size}
+          />
+        ),
+      })}
     >
       <Tab.Screen name="Inicio" component={HomeScreen} />
       <Tab.Screen name="Entrenar" component={TrainScreen} />

@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import * as ImagePicker from "expo-image-picker";
 
 const BACKGROUND_DIRECTORY = `${FileSystem.documentDirectory}appearance-background/`;

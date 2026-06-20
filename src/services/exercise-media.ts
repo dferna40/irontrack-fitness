@@ -1,5 +1,5 @@
 import { Alert, Image } from "react-native";
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import * as ImageManipulator from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import { deleteExerciseMedia, upsertExerciseMedia } from "../repositories/exerciseMediaRepository";
@@ -149,7 +149,7 @@ export async function pickAndStoreExerciseMedia(exerciseId: number) {
     to: destinationUri,
   });
 
-  const fileInfo = await FileSystem.getInfoAsync(destinationUri, { size: true });
+  const fileInfo = await FileSystem.getInfoAsync(destinationUri);
 
   return upsertExerciseMedia({
     exerciseId,

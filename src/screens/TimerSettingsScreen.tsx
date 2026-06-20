@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Alert, StyleSheet, Switch, Text, TextInput, View } from "react-native";
-import * as Notifications from "expo-notifications";
 import { Card } from "../components/Card";
 import { PrimaryButton } from "../components/PrimaryButton";
 import { ScreenContainer } from "../components/ScreenContainer";
 import { useAppState } from "../services/app-state";
+import { requestLocalNotificationPermissions } from "../services/notifications";
 import { theme } from "../theme";
 
 export function TimerSettingsScreen() {
@@ -39,12 +39,21 @@ export function TimerSettingsScreen() {
   }, [settings]);
 
   const handleSave = async () => {
+    let nextLocalNotificationEnabled = localNotificationEnabled;
+
     if (localNotificationEnabled) {
-      const permissions = await Notifications.requestPermissionsAsync();
-      if (!permissions.granted) {
+      const permissionResult = await requestLocalNotificationPermissions();
+
+      if (!permissionResult.supported) {
+        nextLocalNotificationEnabled = false;
+        Alert.alert(
+          "No disponible en Expo Go",
+          "Las notificaciones locales del temporizador no estan disponibles en Expo Go. Para probarlas necesitaras una build de desarrollo o una app compilada.",
+        );
+      } else if (!permissionResult.granted) {
         Alert.alert(
           "Permiso necesario",
-          "Sin permiso de notificaciones no se podrán mostrar avisos locales.",
+          "Sin permiso de notificaciones no se podran mostrar avisos locales.",
         );
       }
     }
@@ -55,7 +64,7 @@ export function TimerSettingsScreen() {
       progressionRecommendationsEnabled,
       soundEnabled,
       vibrationEnabled,
-      localNotificationEnabled,
+      localNotificationEnabled: nextLocalNotificationEnabled,
       keepScreenAwake,
       quickAdd15Enabled: quick15,
       quickAdd30Enabled: quick30,
@@ -63,7 +72,7 @@ export function TimerSettingsScreen() {
     });
 
     await refreshSettings();
-    Alert.alert("Guardado", "La configuración se ha actualizado.");
+    Alert.alert("Guardado", "La configuracion se ha actualizado.");
   };
 
   return (
@@ -83,16 +92,16 @@ export function TimerSettingsScreen() {
           />
         </View>
 
-        <SwitchRow label="Inicio automático" value={autoStartRest} onValueChange={setAutoStartRest} />
+        <SwitchRow label="Inicio automatico" value={autoStartRest} onValueChange={setAutoStartRest} />
         <SwitchRow
-          label="Recomendaciones de progresión"
+          label="Recomendaciones de progresion"
           value={progressionRecommendationsEnabled}
           onValueChange={setProgressionRecommendationsEnabled}
         />
         <SwitchRow label="Sonido activado" value={soundEnabled} onValueChange={setSoundEnabled} />
-        <SwitchRow label="Vibración activada" value={vibrationEnabled} onValueChange={setVibrationEnabled} />
+        <SwitchRow label="Vibracion activada" value={vibrationEnabled} onValueChange={setVibrationEnabled} />
         <SwitchRow
-          label="Notificación local activada"
+          label="Notificacion local activada"
           value={localNotificationEnabled}
           onValueChange={setLocalNotificationEnabled}
         />
@@ -101,9 +110,9 @@ export function TimerSettingsScreen() {
           value={keepScreenAwake}
           onValueChange={setKeepScreenAwake}
         />
-        <SwitchRow label="Botón rápido +15" value={quick15} onValueChange={setQuick15} />
-        <SwitchRow label="Botón rápido +30" value={quick30} onValueChange={setQuick30} />
-        <SwitchRow label="Botón rápido +60" value={quick60} onValueChange={setQuick60} />
+        <SwitchRow label="Boton rapido +15" value={quick15} onValueChange={setQuick15} />
+        <SwitchRow label="Boton rapido +30" value={quick30} onValueChange={setQuick30} />
+        <SwitchRow label="Boton rapido +60" value={quick60} onValueChange={setQuick60} />
       </Card>
 
       <PrimaryButton label="Guardar ajustes" onPress={() => void handleSave()} />

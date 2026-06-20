@@ -1,21 +1,12 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import * as Notifications from "expo-notifications";
 import { ActivityIndicator, Text, View } from "react-native";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { AppNavigator } from "./src/navigation/AppNavigator";
 import { AppStateProvider, useAppState } from "./src/services/app-state";
 import { TrainingSessionProvider } from "./src/services/training-session";
 import { theme } from "./src/theme";
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowBanner: true,
-    shouldShowList: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
 
 const navigationTheme = {
   ...DefaultTheme,
@@ -91,10 +82,12 @@ function AppContent() {
 
 export default function App() {
   return (
-    <AppStateProvider>
-      <TrainingSessionProvider>
-        <AppContent />
-      </TrainingSessionProvider>
-    </AppStateProvider>
+    <SafeAreaProvider>
+      <AppStateProvider>
+        <TrainingSessionProvider>
+          <AppContent />
+        </TrainingSessionProvider>
+      </AppStateProvider>
+    </SafeAreaProvider>
   );
 }

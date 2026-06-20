@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system";
+import * as FileSystem from "expo-file-system/legacy";
 import { getDatabase } from "../database/client";
 import { ensureDefaultMotivationalQuotes } from "../repositories/motivationalQuoteRepository";
 import { seedInitialEquipment } from "../seed/initialEquipment";

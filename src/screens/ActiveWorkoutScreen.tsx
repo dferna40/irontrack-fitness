@@ -1,7 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useEffect, useMemo, useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, View, Vibration } from "react-native";
-import * as Notifications from "expo-notifications";
 import { activateKeepAwakeAsync, deactivateKeepAwake } from "expo-keep-awake";
 import { Card } from "../components/Card";
 import { PrimaryButton } from "../components/PrimaryButton";
@@ -10,6 +9,7 @@ import { SecondaryButton } from "../components/SecondaryButton";
 import { TimerCard } from "../components/TimerCard";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { useAppState } from "../services/app-state";
+import { scheduleLocalNotification } from "../services/notifications";
 import { useTrainingSession } from "../services/training-session";
 import { theme } from "../theme";
 import { openMusicUrl } from "../utils/music";
@@ -72,17 +72,11 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
     }
 
     if (settings?.localNotificationEnabled) {
-      const permissions = await Notifications.requestPermissionsAsync();
-      if (permissions.granted) {
-        await Notifications.scheduleNotificationAsync({
-          content: {
-            title: "Descanso terminado",
-            body: `Sigue con ${currentExercise.name}`,
-            sound: settings.soundEnabled ? "default" : false,
-          },
-          trigger: null,
-        });
-      }
+      await scheduleLocalNotification({
+        title: "Descanso terminado",
+        body: `Sigue con ${currentExercise.name}`,
+        soundEnabled: settings.soundEnabled,
+      });
     }
   };
 
