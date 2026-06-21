@@ -7,14 +7,14 @@ import { PrimaryButton } from "../components/PrimaryButton";
 import { ScreenContainer } from "../components/ScreenContainer";
 import { SecondaryButton } from "../components/SecondaryButton";
 import { RootStackParamList } from "../navigation/AppNavigator";
-import { duplicateRoutine } from "../repositories/routineRepository";
 import { getExercisesForRoutine } from "../repositories/routineExerciseRepository";
-import { getLastWeightUsedMap } from "../repositories/workoutRepository";
-import { getRoutineById } from "../repositories/routineRepository";
+import { duplicateRoutine, getRoutineById } from "../repositories/routineRepository";
 import { useAppState } from "../services/app-state";
+import { prepareRoutineWorkout } from "../services/routine-workout";
 import { useTrainingSession } from "../services/training-session";
 import { theme } from "../theme";
-import { ActiveWorkoutExercise, Routine, RoutineExerciseWithExercise } from "../types/models";
+import { Routine, RoutineExerciseWithExercise } from "../types/models";
+import { repairTextEncoding } from "../utils/text";
 
 type Props = NativeStackScreenProps<RootStackParamList, "RoutineDetail">;
 
@@ -28,23 +28,6 @@ function formatRepRange(item: RoutineExerciseWithExercise) {
   }
 
   return String(item.targetRepsMin ?? item.targetRepsMax ?? "-");
-}
-
-function toActiveExercise(item: RoutineExerciseWithExercise): ActiveWorkoutExercise {
-  return {
-    routineExerciseId: item.id,
-    exerciseId: item.exerciseId,
-    exerciseOrder: item.exerciseOrder,
-    name: item.exercise.name,
-    type: item.exercise.type,
-    muscleGroup: item.exercise.muscleGroup,
-    targetSets: item.targetSets ?? 1,
-    targetRepsMin: item.targetRepsMin,
-    targetRepsMax: item.targetRepsMax,
-    targetWeight: item.targetWeight,
-    restSeconds: item.restSeconds ?? item.exercise.defaultRestSeconds ?? 60,
-    notes: item.notes,
-  };
 }
 
 export function RoutineDetailScreen({ navigation, route }: Props) {
@@ -78,38 +61,25 @@ export function RoutineDetailScreen({ navigation, route }: Props) {
   }
 
   const handleStartRoutine = async () => {
-    if (!items.length) {
-      Alert.alert("Sin ejercicios", "La rutina no tiene ejercicios para empezar.");
+    if (!profile) {
+      Alert.alert("Perfil no disponible", "No se pudo cargar el perfil activo.");
       return;
     }
 
     try {
-      const lastWeightMap = profile
-        ? await getLastWeightUsedMap(
-            profile.id,
-            items.map((item) => item.exerciseId),
-          )
-        : new Map<number, number>();
+      const preparedRoutine = await prepareRoutineWorkout(profile.id, routine.id);
 
       startRoutineWorkout({
-        routineId: routine.id,
-        routineName: routine.name,
+        routineId: preparedRoutine.routine.id,
+        routineName: preparedRoutine.routine.name,
         workoutType: "routine",
-        exercises: items.map((item) => {
-          const activeExercise = toActiveExercise(item);
-          const lastWeightUsed = lastWeightMap.get(item.exerciseId);
-
-          return {
-            ...activeExercise,
-            targetWeight: lastWeightUsed ?? activeExercise.targetWeight,
-          };
-        }),
+        exercises: preparedRoutine.exercises,
       });
       navigation.navigate("ActiveWorkout");
     } catch (error) {
       Alert.alert(
         "No se pudo preparar el entrenamiento",
-        error instanceof Error ? error.message : "Intentalo de nuevo.",
+        error instanceof Error ? repairTextEncoding(error.message) : "Inténtalo de nuevo.",
       );
     }
   };
@@ -122,14 +92,18 @@ export function RoutineDetailScreen({ navigation, route }: Props) {
   return (
     <ScreenContainer>
       <Card>
-        <Text style={styles.title}>{routine.name}</Text>
+        <Text style={styles.title}>{repairTextEncoding(routine.name)}</Text>
         <View style={styles.section}>
           <Text style={styles.label}>Descripción</Text>
-          <Text style={styles.body}>{routine.description || "Sin descripción."}</Text>
+          <Text style={styles.body}>
+            {repairTextEncoding(routine.description || "Sin descripción.")}
+          </Text>
         </View>
         <View style={styles.section}>
           <Text style={styles.label}>Objetivo</Text>
-          <Text style={styles.body}>{routine.goal || "Sin objetivo definido."}</Text>
+          <Text style={styles.body}>
+            {repairTextEncoding(routine.goal || "Sin objetivo definido.")}
+          </Text>
         </View>
       </Card>
 
@@ -141,9 +115,10 @@ export function RoutineDetailScreen({ navigation, route }: Props) {
               <View style={styles.exerciseHeader}>
                 <Text style={styles.order}>{item.exerciseOrder}.</Text>
                 <View style={styles.exerciseHeaderContent}>
-                  <Text style={styles.exerciseName}>{item.exercise.name}</Text>
+                  <Text style={styles.exerciseName}>{repairTextEncoding(item.exercise.name)}</Text>
                   <Text style={styles.meta}>
-                    {item.exercise.muscleGroup} · {item.exercise.type}
+                    {repairTextEncoding(item.exercise.muscleGroup)} ·{" "}
+                    {repairTextEncoding(item.exercise.type)}
                   </Text>
                 </View>
               </View>
@@ -174,7 +149,7 @@ export function RoutineDetailScreen({ navigation, route }: Props) {
               {item.notes ? (
                 <View style={styles.section}>
                   <Text style={styles.label}>Notas</Text>
-                  <Text style={styles.body}>{item.notes}</Text>
+                  <Text style={styles.body}>{repairTextEncoding(item.notes)}</Text>
                 </View>
               ) : null}
             </View>

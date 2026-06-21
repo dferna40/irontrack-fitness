@@ -179,6 +179,83 @@ export async function initDatabase() {
       CREATE INDEX IF NOT EXISTS idx_workout_sets_workout
       ON workout_sets (workout_id, exercise_id, set_number);
 
+      CREATE TABLE IF NOT EXISTS gamification_profiles (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profile_id INTEGER NOT NULL UNIQUE,
+        total_xp INTEGER NOT NULL DEFAULT 0,
+        current_level INTEGER NOT NULL DEFAULT 1,
+        current_level_xp INTEGER NOT NULL DEFAULT 0,
+        next_level_xp INTEGER,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (profile_id) REFERENCES user_profiles (id) ON DELETE CASCADE
+      );
+
+      CREATE TABLE IF NOT EXISTS xp_events (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profile_id INTEGER NOT NULL,
+        workout_id INTEGER,
+        source_type TEXT NOT NULL,
+        source_id INTEGER,
+        xp_amount INTEGER NOT NULL,
+        reason TEXT NOT NULL,
+        metadata TEXT,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (profile_id) REFERENCES user_profiles (id) ON DELETE CASCADE,
+        FOREIGN KEY (workout_id) REFERENCES workouts (id) ON DELETE SET NULL
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_xp_events_profile_created
+      ON xp_events (profile_id, created_at DESC);
+
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_xp_events_source_unique
+      ON xp_events (profile_id, source_type, source_id);
+
+      CREATE TABLE IF NOT EXISTS level_definitions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        level INTEGER NOT NULL UNIQUE,
+        xp_required INTEGER NOT NULL UNIQUE,
+        title TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS achievement_definitions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        code TEXT NOT NULL UNIQUE,
+        name TEXT NOT NULL,
+        description TEXT NOT NULL,
+        category TEXT NOT NULL,
+        icon TEXT,
+        xp_reward INTEGER NOT NULL DEFAULT 0,
+        is_active INTEGER NOT NULL DEFAULT 1,
+        criteria_type TEXT NOT NULL,
+        criteria_value INTEGER NOT NULL,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_achievement_definitions_category_active
+      ON achievement_definitions (category, is_active);
+
+      CREATE TABLE IF NOT EXISTS profile_achievements (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        profile_id INTEGER NOT NULL,
+        achievement_id INTEGER NOT NULL,
+        progress_value INTEGER NOT NULL DEFAULT 0,
+        unlocked_at TEXT,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (profile_id) REFERENCES user_profiles (id) ON DELETE CASCADE,
+        FOREIGN KEY (achievement_id) REFERENCES achievement_definitions (id) ON DELETE CASCADE
+      );
+
+      CREATE UNIQUE INDEX IF NOT EXISTS idx_profile_achievements_unique
+      ON profile_achievements (profile_id, achievement_id);
+
+      CREATE INDEX IF NOT EXISTS idx_profile_achievements_profile_unlocked
+      ON profile_achievements (profile_id, unlocked_at DESC);
+
       CREATE TABLE IF NOT EXISTS app_settings (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         default_rest_seconds INTEGER NOT NULL DEFAULT 60,

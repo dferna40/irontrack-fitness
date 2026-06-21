@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model UserProfile {
+  id                   Int                   @id @default(autoincrement())
+  gamificationProfile  GamificationProfile?
+  xpEvents             XpEvent[]
+  profileAchievements  ProfileAchievement[]
+}
+
+model Workout {
+  id        Int       @id @default(autoincrement())
+  xpEvents  XpEvent[]
+}
+
+model GamificationProfile {
+  id             Int       @id @default(autoincrement())
+  profileId      Int       @unique
+  totalXp        Int       @default(0)
+  currentLevel   Int       @default(1)
+  currentLevelXp Int       @default(0)
+  nextLevelXp    Int?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  profile        UserProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@index([currentLevel])
+}
+
+model XpEvent {
+  id          Int          @id @default(autoincrement())
+  profileId   Int
+  workoutId   Int?
+  sourceType  XpSourceType
+  sourceId    Int?
+  xpAmount    Int
+  reason      String
+  metadata    String?
+  createdAt   DateTime     @default(now())
+
+  profile     UserProfile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  workout     Workout?     @relation(fields: [workoutId], references: [id], onDelete: SetNull)
+
+  @@index([profileId, createdAt])
+  @@index([sourceType, sourceId])
+  @@unique([profileId, sourceType, sourceId])
+}
+
+model LevelDefinition {
+  id          Int       @id @default(autoincrement())
+  level       Int       @unique
+  xpRequired  Int       @unique
+  title       String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model AchievementDefinition {
+  id                 Int                     @id @default(autoincrement())
+  code               String                  @unique
+  name               String
+  description        String
+  category           AchievementCategory
+  icon               String?
+  xpReward           Int                     @default(0)
+  isActive           Boolean                 @default(true)
+  criteriaType       AchievementCriteriaType
+  criteriaValue      Int
+  createdAt          DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+
+  profileAchievements ProfileAchievement[]
+
+  @@index([category, isActive])
+}
+
+model ProfileAchievement {
+  id             Int                   @id @default(autoincrement())
+  profileId      Int
+  achievementId  Int
+  progressValue  Int                   @default(0)
+  unlockedAt     DateTime?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+
+  profile        UserProfile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  achievement    AchievementDefinition @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, achievementId])
+  @@index([profileId, unlockedAt])
+}
+
+enum XpSourceType {
+  workout_completed
+  achievement_unlocked
+  manual_adjustment
+}
+
+enum AchievementCategory {
+  workout_count
+  workout_type
+  streak
+  progression
+}
+
+enum AchievementCriteriaType {
+  total_workouts
+  total_strength_workouts
+  total_cardio_workouts
+  streak_days
+}

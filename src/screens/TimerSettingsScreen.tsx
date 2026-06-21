@@ -98,7 +98,7 @@ export function TimerSettingsScreen() {
           />
         </View>
 
-        <SwitchRow label="Inicio automatico" value={autoStartRest} onValueChange={setAutoStartRest} />
+          <SwitchRow label="Inicio automático" value={autoStartRest} onValueChange={setAutoStartRest} />
         <SwitchRow
           label="Recomendaciones de progresion"
           value={progressionRecommendationsEnabled}
@@ -122,13 +122,13 @@ export function TimerSettingsScreen() {
           onValueChange={setRememberFocusMode}
         />
         <SwitchRow
-          label="Miniaturas grandes en Ver sesion"
+            label="Miniaturas grandes en Ver sesión"
           value={largeSessionThumbnails}
           onValueChange={setLargeSessionThumbnails}
         />
-        <SwitchRow label="Boton rapido +15" value={quick15} onValueChange={setQuick15} />
-        <SwitchRow label="Boton rapido +30" value={quick30} onValueChange={setQuick30} />
-        <SwitchRow label="Boton rapido +60" value={quick60} onValueChange={setQuick60} />
+          <SwitchRow label="Botón rápido +15" value={quick15} onValueChange={setQuick15} />
+          <SwitchRow label="Botón rápido +30" value={quick30} onValueChange={setQuick30} />
+          <SwitchRow label="Botón rápido +60" value={quick60} onValueChange={setQuick60} />
       </Card>
 
       <PrimaryButton label="Guardar ajustes" onPress={() => void handleSave()} />

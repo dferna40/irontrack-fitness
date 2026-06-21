@@ -16,7 +16,6 @@ import {
 } from "../repositories/workoutRepository";
 import { useAppState } from "../services/app-state";
 import { theme } from "../theme";
-import { openMusicUrl } from "../utils/music";
 import type {
   ExerciseProgressSummaryItem,
   MotivationalQuote,
@@ -24,6 +23,8 @@ import type {
   WorkoutHistoryItem,
   WorkoutProgressSummary,
 } from "../types/models";
+import { openMusicUrl } from "../utils/music";
+import { repairTextEncoding } from "../utils/text";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -142,8 +143,10 @@ export function HomeScreen() {
       {(appearanceSettings?.showSuggestedRoutine ?? true) && suggestedRoutine ? (
         <Card>
           <SectionHeader title="Rutina sugerida" helper="Lista para continuar sin perder tiempo" />
-          <Text style={styles.cardText}>{suggestedRoutine.name}</Text>
-          <Text style={styles.cardMeta}>{suggestedRoutine.goal || "Rutina activa disponible"}</Text>
+          <Text style={styles.cardText}>{repairTextEncoding(suggestedRoutine.name)}</Text>
+          <Text style={styles.cardMeta}>
+            {repairTextEncoding(suggestedRoutine.goal || "Rutina activa disponible")}
+          </Text>
           <PrimaryButton
             label="Ver rutina"
             onPress={() => navigation.navigate("RoutineDetail", { routineId: suggestedRoutine.id })}
@@ -157,7 +160,7 @@ export function HomeScreen() {
           {lastWorkout ? (
             <>
               <Text style={styles.cardText}>
-                {lastWorkout.routineName || formatWorkoutType(lastWorkout.workoutType)}
+                {repairTextEncoding(lastWorkout.routineName || formatWorkoutType(lastWorkout.workoutType))}
               </Text>
               <Text style={styles.cardMeta}>
                 {formatDate(lastWorkout.date)} · {lastWorkout.setCount} series ·{" "}
@@ -198,7 +201,7 @@ export function HomeScreen() {
           <SectionHeader title="Progreso reciente" helper="Último ejercicio con datos registrados" />
           {recentProgress ? (
             <>
-              <Text style={styles.cardText}>{recentProgress.exerciseName}</Text>
+              <Text style={styles.cardText}>{repairTextEncoding(recentProgress.exerciseName)}</Text>
               <Text style={styles.cardMeta}>
                 Último peso: {recentProgress.lastWeightUsed ?? 0} kg · Mejor peso:{" "}
                 {recentProgress.bestWeightUsed ?? 0} kg
@@ -221,7 +224,7 @@ export function HomeScreen() {
       {(appearanceSettings?.showMotivationalQuote ?? true) && quote ? (
         <Card style={styles.quoteCard}>
           <Text style={styles.quoteKicker}>HOY TOCA</Text>
-          <Text style={styles.quote}>{quote}</Text>
+          <Text style={styles.quote}>{repairTextEncoding(quote)}</Text>
         </Card>
       ) : null}
 

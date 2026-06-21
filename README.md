@@ -1,7 +1,7 @@
 # IronTrack Fitness
 
 IronTrack Fitness es una app movil para gestionar entrenamientos en un gimnasio personal en casa.
-Esta pensada para uso rapido en Android durante entrenamientos reales, con funcionamiento
+Está pensada para uso rápido en Android durante entrenamientos reales, con funcionamiento
 principalmente offline y sin depender de backend en la primera version.
 
 ## Tecnologias usadas
@@ -67,7 +67,7 @@ npm.cmd run android
   - almacenamiento local
   - vista previa
   - eliminacion
-- Vista tecnica de ejercicio.
+- Vista técnica de ejercicio.
 - Rutinas:
   - tablas y repositorios
   - semilla inicial
@@ -88,7 +88,7 @@ npm.cmd run android
 - Recomendaciones basicas de progresion.
 - Cardio basico con guardado local.
 - Boxeo por rondas con guardado local.
-- Musica externa mediante URLs y apertura con `Linking.openURL`.
+- Música externa mediante URLs y apertura con `Linking.openURL`.
 - Configuracion principal organizada por secciones.
 - Configuracion de apariencia:
   - tema
@@ -143,16 +143,16 @@ src/
   utils/           Constantes y helpers
 ```
 
-## Notas tecnicas importantes
+## Notas técnicas importantes
 
 - La app esta pensada primero para Android.
 - No hay backend ni sincronizacion en esta fase.
 - El almacenamiento principal es SQLite local.
 - La app funciona offline.
-- Algunas configuraciones visuales ya se guardan, pero no todas se aplican todavia a toda la app.
+- Algunas configuraciones visuales ya se guardan, pero no todas se aplican todavía a toda la app.
 - El recurso visual de ejercicios y el fondo personalizado se guardan en almacenamiento local de la app.
 - Las notificaciones del temporizador dependen de permisos del dispositivo.
-- La musica no se reproduce dentro de la app:
+- La música no se reproduce dentro de la app:
   solo se abren URLs externas.
 - El reinicio total de datos elimina tambien ajustes, historial y archivos locales asociados.
 - Se ha priorizado no rehacer arquitectura ya funcional y crecer por fases.

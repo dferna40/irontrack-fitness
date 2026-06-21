@@ -309,6 +309,89 @@ export interface WorkoutProgressSummary {
   totalVolume: number;
 }
 
+export type XpSourceType = "workout_completed" | "achievement_unlocked" | "manual_adjustment";
+export type AchievementCategory = "workout_count" | "workout_type" | "streak" | "progression";
+export type AchievementCriteriaType =
+  | "total_workouts"
+  | "total_strength_workouts"
+  | "total_cardio_workouts"
+  | "streak_days";
+
+export interface GamificationProfile {
+  id: number;
+  profileId: number;
+  totalXp: number;
+  currentLevel: number;
+  currentLevelXp: number;
+  nextLevelXp: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface XpEvent {
+  id: number;
+  profileId: number;
+  workoutId: number | null;
+  sourceType: XpSourceType;
+  sourceId: number | null;
+  xpAmount: number;
+  reason: string;
+  metadata: string | null;
+  createdAt: string;
+}
+
+export interface LevelDefinition {
+  id: number;
+  level: number;
+  xpRequired: number;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AchievementDefinition {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  category: AchievementCategory;
+  icon: string | null;
+  xpReward: number;
+  isActive: boolean;
+  criteriaType: AchievementCriteriaType;
+  criteriaValue: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProfileAchievement {
+  id: number;
+  profileId: number;
+  achievementId: number;
+  progressValue: number;
+  unlockedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AchievementWithStatus extends AchievementDefinition {
+  progressValue: number;
+  unlockedAt: string | null;
+  isUnlocked: boolean;
+}
+
+export interface GamificationProgress {
+  profile: GamificationProfile;
+  currentLevelTitle: string;
+  nextLevel: number | null;
+  nextLevelTitle: string | null;
+  xpIntoCurrentLevel: number;
+  xpToNextLevel: number | null;
+  progressPercent: number;
+  recentXpEvents: XpEvent[];
+  unlockedAchievementsCount: number;
+}
+
 export interface ExerciseProgressSummaryItem {
   exerciseId: number;
   exerciseName: string;

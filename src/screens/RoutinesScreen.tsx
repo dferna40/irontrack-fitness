@@ -7,12 +7,12 @@ import { ScreenContainer } from "../components/ScreenContainer";
 import { SecondaryButton } from "../components/SecondaryButton";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/AppNavigator";
-import { duplicateRoutine } from "../repositories/routineRepository";
 import { getExercisesForRoutine } from "../repositories/routineExerciseRepository";
-import { listRoutines } from "../repositories/routineRepository";
+import { duplicateRoutine, listRoutines } from "../repositories/routineRepository";
 import { useAppState } from "../services/app-state";
 import { theme } from "../theme";
 import { Routine } from "../types/models";
+import { repairTextEncoding } from "../utils/text";
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -60,19 +60,16 @@ export function RoutinesScreen() {
         </Text>
       </View>
 
-      <PrimaryButton
-        label="Nueva rutina"
-        onPress={() => navigation.navigate("RoutineForm")}
-      />
+      <PrimaryButton label="Nueva rutina" onPress={() => navigation.navigate("RoutineForm")} />
 
       {items.map((routine) => (
         <Card key={routine.id}>
-          <Text style={styles.cardTitle}>{routine.name}</Text>
-          <Text style={styles.meta}>{routine.goal || "Sin objetivo definido"}</Text>
-          <Text style={styles.meta}>{routine.exerciseCount} ejercicios</Text>
+          <Text style={styles.cardTitle}>{repairTextEncoding(routine.name)}</Text>
           <Text style={styles.meta}>
-            Estado: {routine.isActive ? "Activa" : "Inactiva"}
+            {repairTextEncoding(routine.goal || "Sin objetivo definido")}
           </Text>
+          <Text style={styles.meta}>{routine.exerciseCount} ejercicios</Text>
+          <Text style={styles.meta}>Estado: {routine.isActive ? "Activa" : "Inactiva"}</Text>
 
           <PrimaryButton
             label="Ver detalle"
@@ -97,7 +94,7 @@ export function RoutinesScreen() {
                 } catch (error) {
                   Alert.alert(
                     "No se pudo duplicar",
-                    error instanceof Error ? error.message : "Inténtalo de nuevo.",
+                    error instanceof Error ? repairTextEncoding(error.message) : "Inténtalo de nuevo.",
                   );
                 }
               })()

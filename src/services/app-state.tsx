@@ -10,6 +10,7 @@ import { getActiveProfile } from "../repositories/userProfileRepository";
 import { seedInitialEquipment } from "../seed/initialEquipment";
 import { seedInitialExercises } from "../seed/initialExercises";
 import { seedInitialRoutines } from "../seed/initialRoutines";
+import { ensureDefaultGamificationCatalog } from "../repositories/gamificationRepository";
 import {
   AppearanceSettings,
   AppSettings,
@@ -69,6 +70,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       try {
         setError(null);
         await initDatabase();
+        await ensureDefaultGamificationCatalog();
         await ensureDefaultMotivationalQuotes();
         await refreshProfile();
         await refreshSettings();

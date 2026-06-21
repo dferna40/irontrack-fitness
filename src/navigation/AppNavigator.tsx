@@ -30,6 +30,7 @@ import { RoutineDetailScreen } from "../screens/RoutineDetailScreen";
 import { RoutineFormScreen } from "../screens/RoutineFormScreen";
 import { RoutinesScreen } from "../screens/RoutinesScreen";
 import { SettingsScreen } from "../screens/SettingsScreen";
+import { StrengthModeScreen } from "../screens/StrengthModeScreen";
 import { TimerSettingsScreen } from "../screens/TimerSettingsScreen";
 import { TrainScreen } from "../screens/TrainScreen";
 import { WorkoutDetailScreen } from "../screens/WorkoutDetailScreen";
@@ -50,6 +51,7 @@ export type RootStackParamList = {
   ExerciseProgressDetail: { exerciseId: number };
   ExercisesLibrary: undefined;
   FreeWorkoutSetup: undefined;
+  StrengthMode: undefined;
   CardioSession: undefined;
   BoxingSetup: undefined;
   BoxingActive: {
@@ -233,6 +235,11 @@ export function AppNavigator() {
             name="ExercisesLibrary"
             component={ExercisesScreen}
             options={{ title: "Ejercicios" }}
+          />
+          <Stack.Screen
+            name="StrengthMode"
+            component={StrengthModeScreen}
+            options={{ title: "Modo fuerza" }}
           />
           <Stack.Screen
             name="FreeWorkoutSetup"

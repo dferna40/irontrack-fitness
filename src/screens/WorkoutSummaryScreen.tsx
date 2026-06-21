@@ -8,6 +8,7 @@ import { ScreenContainer } from "../components/ScreenContainer";
 import { RootStackParamList } from "../navigation/AppNavigator";
 import { createWorkoutWithSets } from "../repositories/workoutRepository";
 import { useAppState } from "../services/app-state";
+import { awardWorkoutCompletionXp } from "../services/gamification";
 import { useTrainingSession } from "../services/training-session";
 import { theme } from "../theme";
 import { buildProgressRecommendations } from "../utils/progression";
@@ -54,7 +55,7 @@ export function WorkoutSummaryScreen({ navigation }: Props) {
         ),
       );
 
-      await createWorkoutWithSets(
+      const workout = await createWorkoutWithSets(
         {
           profileId: profile.id,
           routineId: payload.routineId,
@@ -78,6 +79,8 @@ export function WorkoutSummaryScreen({ navigation }: Props) {
           notes: set.notes,
         })),
       );
+
+      await awardWorkoutCompletionXp(profile.id, workout);
 
       clearSession();
       navigation.reset({

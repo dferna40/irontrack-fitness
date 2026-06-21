@@ -134,7 +134,7 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
           setExerciseMediaMap(mediaMap);
         }
       } catch (error) {
-        console.warn("No se pudo cargar el estado visual de la sesion", error);
+        console.warn("No se pudo cargar el estado visual de la sesión", error);
         if (isMounted) {
           setExerciseMediaMap(new Map());
         }
@@ -261,7 +261,7 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
 
   const renderSessionOverview = () => (
     <Card>
-      <Text style={styles.sectionTitle}>Vista rapida de la sesion</Text>
+      <Text style={styles.sectionTitle}>Vista rápida de la sesión</Text>
       <Text style={styles.meta}>
         Toca cualquier ejercicio para saltar directamente a el. El icono indica si tiene recurso
         visual.
@@ -360,7 +360,7 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
         </View>
 
         <View style={styles.restPresetBlock}>
-          <Text style={styles.subsectionLabel}>Descanso rapido</Text>
+          <Text style={styles.subsectionLabel}>Descanso rápido</Text>
           <View style={styles.restPresetRow}>
             {[45, 60, 75, 90].map((value) => {
               const selected = selectedRestSeconds === value;
@@ -393,7 +393,7 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
 
         <View style={styles.heroActions}>
           <SecondaryButton
-            label="Ver sesion"
+            label="Ver sesión"
             onPress={() => setShowSessionOverview(true)}
             style={styles.flexButton}
           />
@@ -457,7 +457,7 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
 
         <View style={styles.heroActions}>
           <SecondaryButton
-            label={showSessionOverview ? "Volver al ejercicio" : "Ver sesion"}
+            label={showSessionOverview ? "Volver al ejercicio" : "Ver sesión"}
             onPress={() => setShowSessionOverview((current) => !current)}
             style={styles.flexButton}
           />
@@ -476,10 +476,10 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
       ) : (
         <>
           <Card>
-            <Text style={styles.sectionTitle}>Registro rapido</Text>
+            <Text style={styles.sectionTitle}>Registro rápido</Text>
 
             <View style={styles.restPresetBlock}>
-              <Text style={styles.subsectionLabel}>Descanso rapido</Text>
+              <Text style={styles.subsectionLabel}>Descanso rápido</Text>
               <View style={styles.restPresetRow}>
                 {[45, 60, 75, 90].map((value) => {
                   const selected = selectedRestSeconds === value;
@@ -597,7 +597,7 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
                 </View>
               ))
             ) : (
-              <Text style={styles.meta}>Todavia no hay series guardadas para este ejercicio.</Text>
+              <Text style={styles.meta}>Todavía no hay series guardadas para este ejercicio.</Text>
             )}
 
             {editingSetNumber !== null ? (
@@ -642,7 +642,7 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
             </View>
             <View style={styles.metricRow}>
               <SecondaryButton
-                label="Ver tecnica"
+                label="Ver técnica"
                 onPress={() =>
                   navigation.navigate("ExerciseTechnique", {
                     exerciseId: currentExercise.exerciseId,
@@ -651,7 +651,7 @@ export function ActiveWorkoutScreen({ navigation }: Props) {
                 style={styles.flexButton}
               />
               <SecondaryButton
-                label="Abrir musica"
+                label="Abrir música"
                 onPress={() => void openMusicUrl(settings, "weights")}
                 style={styles.flexButton}
               />

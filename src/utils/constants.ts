@@ -53,7 +53,7 @@ export const themeOptions: Array<{ label: string; value: ThemeMode }> = [
 export const appearanceThemeOptions: Array<{ label: string; value: AppearanceThemeMode }> = [
   { label: "Oscuro", value: "dark" },
   { label: "Claro", value: "light" },
-  { label: "Automatico", value: "system" },
+  { label: "Automático", value: "system" },
 ];
 
 export const cardStyleOptions: Array<{ label: string; value: CardStyle }> = [
@@ -63,7 +63,7 @@ export const cardStyleOptions: Array<{ label: string; value: CardStyle }> = [
 ];
 
 export const textSizeOptions: Array<{ label: string; value: TextSize }> = [
-  { label: "Pequeno", value: "small" },
+  { label: "Pequeño", value: "small" },
   { label: "Normal", value: "normal" },
   { label: "Grande", value: "large" },
 ];
@@ -76,7 +76,7 @@ export const timerStyleOptions: Array<{ label: string; value: TimerStyle }> = [
 
 export const backgroundModeOptions: Array<{ label: string; value: BackgroundMode }> = [
   { label: "Por defecto", value: "default" },
-  { label: "Color solido", value: "solid" },
+  { label: "Color sólido", value: "solid" },
   { label: "Degradado", value: "gradient" },
   { label: "Imagen", value: "image" },
 ];
@@ -99,21 +99,21 @@ export const gradientPresetOptions = [
 
 export const initialEquipmentSeed = [
   { name: "Cinta de correr", category: "Cardio", notes: "Trabajo aerobico y calentamiento." },
-  { name: "Bicicleta estÃ¡tica", category: "Cardio", notes: "Sesiones de cardio moderado." },
-  { name: "Bandas elÃ¡sticas", category: "Accesorios", notes: "Movilidad, activacion y resistencia." },
+  { name: "Bicicleta estática", category: "Cardio", notes: "Sesiones de cardio moderado." },
+  { name: "Bandas elásticas", category: "Accesorios", notes: "Movilidad, activación y resistencia." },
   { name: "Mancuernas", category: "Peso libre", notes: "Trabajo unilateral y auxiliar." },
-  { name: "MÃ¡quina de poleas", category: "Polea", notes: "Ejercicios guiados y accesorios." },
+  { name: "Máquina de poleas", category: "Polea", notes: "Ejercicios guiados y accesorios." },
   { name: "Remo bajo en polea", category: "Polea", notes: "Trabajo de espalda." },
   { name: "Press banca", category: "Banco", notes: "Press horizontal." },
-  { name: "Banco multifunciÃ³n", category: "Banco", notes: "Incluye trabajo de cuadriceps y femoral." },
+  { name: "Banco multifunción", category: "Banco", notes: "Incluye trabajo de cuadríceps y femoral." },
   { name: "Barra de dominadas", category: "Calistenia", notes: "Trabajo de traccion." },
   { name: "Barra Z", category: "Peso libre", notes: "Curl y extensiones." },
   { name: "Pesas/discos", category: "Peso libre", notes: "Carga progresiva." },
-  { name: "Saco de boxeo", category: "Boxeo", notes: "Trabajo por rondas y tecnica." },
-  { name: "Cuerda para trÃ­ceps", category: "Polea", notes: "Accesorio de aislamiento." },
+  { name: "Saco de boxeo", category: "Boxeo", notes: "Trabajo por rondas y técnica." },
+  { name: "Cuerda para tríceps", category: "Polea", notes: "Accesorio de aislamiento." },
   { name: "Agarres de polea", category: "Polea", notes: "Varios agarres intercambiables." },
   { name: "Esterilla", category: "Suelo", notes: "Core, movilidad y estiramientos." },
-  { name: "Espejo grande", category: "Entorno", notes: "Control postural y tecnica." },
+  { name: "Espejo grande", category: "Entorno", notes: "Control postural y técnica." },
 ];
 
 export const exerciseTypeOptions: Array<{ label: string; value: ExerciseType }> = [
@@ -143,7 +143,7 @@ export const initialExerciseSeed = [
     description: "Variante inclinada para la parte superior del pecho.",
     technicalNotes: "Ajusta el banco y evita subir hombros.",
     executionTips: "Manten antebrazos verticales y rango controlado.",
-    equipmentNames: ["Banco multifunciÃ³n", "Pesas/discos"],
+    equipmentNames: ["Banco multifunción", "Pesas/discos"],
   },
   {
     name: "Aperturas con mancuernas",
@@ -153,7 +153,7 @@ export const initialExerciseSeed = [
     description: "Aislamiento de pecho con recorrido amplio.",
     technicalNotes: "Ligera flexion de codos durante todo el gesto.",
     executionTips: "No bajes mas de lo que puedas controlar.",
-    equipmentNames: ["Mancuernas", "Banco multifunciÃ³n"],
+    equipmentNames: ["Mancuernas", "Banco multifunción"],
   },
   {
     name: "Cruces en polea",
@@ -163,7 +163,7 @@ export const initialExerciseSeed = [
     description: "Trabajo de polea para pecho con tension continua.",
     technicalNotes: "Tronco estable y hombros abajo.",
     executionTips: "Cierra al frente y vuelve lento en la negativa.",
-    equipmentNames: ["MÃ¡quina de poleas", "Agarres de polea"],
+    equipmentNames: ["Máquina de poleas", "Agarres de polea"],
   },
   {
     name: "Jalón al pecho",
@@ -173,7 +173,7 @@ export const initialExerciseSeed = [
     description: "Traccion vertical guiada para espalda.",
     technicalNotes: "Pecho abierto y lumbar estable.",
     executionTips: "Lleva el agarre hacia la parte alta del pecho.",
-    equipmentNames: ["MÃ¡quina de poleas", "Agarres de polea"],
+    equipmentNames: ["Máquina de poleas", "Agarres de polea"],
   },
   {
     name: "Remo bajo en polea",
@@ -193,7 +193,7 @@ export const initialExerciseSeed = [
     description: "Remo unilateral con mancuerna.",
     technicalNotes: "Apoya el tronco y evita girarte al subir.",
     executionTips: "Tira con el codo hacia atras y controla la bajada.",
-    equipmentNames: ["Mancuernas", "Banco multifunciÃ³n"],
+    equipmentNames: ["Mancuernas", "Banco multifunción"],
   },
   {
     name: "Dominadas",
@@ -213,7 +213,7 @@ export const initialExerciseSeed = [
     description: "Aislamiento de cuadriceps en banco multifuncion.",
     technicalNotes: "Ajusta el eje de rodilla antes de empezar.",
     executionTips: "Extiende, pausa arriba y baja lento.",
-    equipmentNames: ["Banco multifunciÃ³n"],
+    equipmentNames: ["Banco multifunción"],
   },
   {
     name: "Curl femoral en polea baja",
@@ -223,7 +223,7 @@ export const initialExerciseSeed = [
     description: "Trabajo de femoral con polea baja.",
     technicalNotes: "Mantente estable y evita compensar con la cadera.",
     executionTips: "Flexiona con control y vuelve lento.",
-    equipmentNames: ["MÃ¡quina de poleas", "Agarres de polea"],
+    equipmentNames: ["Máquina de poleas", "Agarres de polea"],
   },
   {
     name: "Sentadilla con mancuernas",
@@ -253,7 +253,7 @@ export const initialExerciseSeed = [
     description: "Press de hombros con rotacion natural.",
     technicalNotes: "No arquees en exceso la espalda al empujar.",
     executionTips: "Sube en linea estable y controla la bajada.",
-    equipmentNames: ["Mancuernas", "Banco multifunciÃ³n"],
+    equipmentNames: ["Mancuernas", "Banco multifunción"],
   },
   {
     name: "Pajaro con mancuernas",
@@ -263,7 +263,7 @@ export const initialExerciseSeed = [
     description: "Trabajo de hombro posterior con mancuernas.",
     technicalNotes: "Mantente inclinado y evita el impulso.",
     executionTips: "Abre lateralmente y controla cada repeticion.",
-    equipmentNames: ["Mancuernas", "Banco multifunciÃ³n"],
+    equipmentNames: ["Mancuernas", "Banco multifunción"],
   },
   {
     name: "Elevacion frontal con mancuernas",
@@ -303,7 +303,7 @@ export const initialExerciseSeed = [
     description: "Curl concentrado para aislamiento de biceps.",
     technicalNotes: "Apoya el brazo y evita balancearte.",
     executionTips: "Aprieta arriba y vuelve lentamente.",
-    equipmentNames: ["Mancuernas", "Banco multifunciÃ³n"],
+    equipmentNames: ["Mancuernas", "Banco multifunción"],
   },
   {
     name: "Extension de triceps en polea alta",
@@ -313,7 +313,7 @@ export const initialExerciseSeed = [
     description: "Extension de codo en polea alta para triceps.",
     technicalNotes: "Codos fijos junto al cuerpo.",
     executionTips: "Extiende por completo sin usar impulso.",
-    equipmentNames: ["MÃ¡quina de poleas", "Agarres de polea"],
+    equipmentNames: ["Máquina de poleas", "Agarres de polea"],
   },
   {
     name: "Extension de triceps con cuerda",
@@ -323,7 +323,7 @@ export const initialExerciseSeed = [
     description: "Variante con cuerda para extension final.",
     technicalNotes: "Mantiene el torso estable y los codos fijos.",
     executionTips: "Separa la cuerda al final del movimiento.",
-    equipmentNames: ["MÃ¡quina de poleas", "Cuerda para trÃ­ceps"],
+    equipmentNames: ["Máquina de poleas", "Cuerda para tríceps"],
   },
   {
     name: "Patada de triceps",
@@ -383,14 +383,14 @@ export const initialExerciseSeed = [
     description: "Cardio de bajo impacto y facil de regular.",
     technicalNotes: "Ajusta la altura del sillin antes de empezar.",
     executionTips: "Mantiene una cadencia constante y hombros relajados.",
-    equipmentNames: ["Bicicleta estÃ¡tica"],
+    equipmentNames: ["Bicicleta estática"],
   },
   {
     name: "Saco de boxeo",
     muscleGroup: "Boxeo",
     type: "boxeo" as const,
     defaultRestSeconds: 60,
-    description: "Trabajo de tecnica, potencia y rounds.",
+    description: "Trabajo de técnica, potencia y rounds.",
     technicalNotes: "Protege munecas y manten guardia activa.",
     executionTips: "Muevete alrededor del saco y combina golpes simples.",
     equipmentNames: ["Saco de boxeo"],
@@ -400,7 +400,7 @@ export const initialExerciseSeed = [
     muscleGroup: "Cardio VR",
     type: "cardio" as const,
     defaultRestSeconds: 30,
-    description: "Sesion cardiovascular interactiva en Meta Quest 3.",
+    description: "Sesión cardiovascular interactiva en Meta Quest 3.",
     technicalNotes: "Usa espacio despejado e intensidad progresiva.",
     executionTips: "Cuenta como cardio si mantienes esfuerzo moderado o alto.",
     equipmentNames: [],
